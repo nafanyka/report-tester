@@ -26,6 +26,7 @@
         @yield('content')
         </main>
         @include('layouts.parts._footer')
+        @include('layouts.parts._dialogs')
     </div>
 </div>
 
