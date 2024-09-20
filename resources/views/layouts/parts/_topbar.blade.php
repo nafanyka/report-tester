@@ -30,5 +30,9 @@
                 </li>
             </ul>
         </ul>
+
+        <div id="globalLoader" class="spinner-border spinner-border-sm" role="status" hidden="hidden">
+            <span class="visually-hidden ">Loading...</span>
+        </div>
     </div>
 </nav>
