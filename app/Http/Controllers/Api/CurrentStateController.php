@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\CurrentState\ReportAddRequest;
 use App\Http\Requests\Api\CurrentState\StoreRequest;
 use App\Models\CurrentState;
+use App\Services\CurrentStateService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -16,10 +18,10 @@ class CurrentStateController extends Controller
      */
     public function index(Request $request)
     {
-        if (is_null($obj = CurrentState::find($request->get('key')))) {
+        if (is_null($value = CurrentStateService::getCurrentState($request->get('key')))) {
             throw new NotFoundHttpException("Key not found");
         }
-        return response()->json(unserialize($obj->value));
+        return response()->json($value);
     }
 
     /**
@@ -29,21 +31,25 @@ class CurrentStateController extends Controller
     {
         $result = 0;
         foreach ($request->data as $row) {
-            if (is_null($obj = CurrentState::find($row['key']))) {
-                $obj = new CurrentState();
-                $obj->key = $row['key'];
-            }
-            $obj->value = serialize($row['value']);
-            $result += (int)$obj->save();
+            $result += (int)CurrentStateService::setCurrentState($row['key'], $row['value']);
         }
         return response()->json($result);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function reports(Request $request)
     {
-        //
+        $reports = CurrentStateService::getCurrentState('reports') ?? [];
+        if (!empty($request->q)) {
+            $reports = array_filter($reports, function ($item) use ($request) {return preg_match("/" . preg_quote($request->q) . "/i", $item);});
+        }
+        return response()->json(array_map(function ($item) {return ["id" => $item, "name" => $item];}, $reports));
+    }
+
+    public function reportAdd(ReportAddRequest $request)
+    {
+        $reports = CurrentStateService::getCurrentState('reports') ?? [];
+        $reports[$request->get('option')] = $request->get('option');
+        CurrentStateService::setCurrentState('reports', $reports);
+        return response()->json(true);
     }
 }

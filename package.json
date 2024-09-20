@@ -16,9 +16,10 @@
         "laravel-vite-plugin": "^1.0",
         "sass": "^1.78.0",
         "simplebar": "5.3.6",
+        "sweetalert": "^2.1.2",
         "vite": "^5.0"
     },
     "dependencies": {
-        "sweetalert": "^2.1.2"
+        "tom-select": "^2.3.1"
     }
 }

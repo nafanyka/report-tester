@@ -7,6 +7,7 @@ use App\Http\Requests\Api\Environment\StoreEnviromentRequest;
 use App\Http\Requests\Api\Environment\UpdateEnviromentRequest;
 use App\Models\CurrentState;
 use App\Models\Environment;
+use App\Services\CurrentStateService;
 
 class EnvironmentController extends Controller
 {
@@ -27,12 +28,7 @@ class EnvironmentController extends Controller
         $env->fill($request->all());
         if ($env->save()) {
             try {
-                if (is_null($obj = CurrentState::find('currentEnv'))) {
-                    $obj = new CurrentState();
-                    $obj->key = 'currentEnv';
-                }
-                $obj->value = serialize($request->get('name'));
-                $obj->save();
+                CurrentStateService::setCurrentState('currentEnv', $request->get('name'));
             } catch (\Throwable) {}
             return response()->json(['saved' => true]);
         } else {

@@ -5,6 +5,11 @@ export const apiUrls = {
         get: '/api/currentstate',
         getAll: '/api/currentstate/getAll',
         set: '/api/currentstate/store',
+    },
+
+    reports: {
+        add: '/api/reports/add',
+        search: '/api/reports',
     }
 }
 

@@ -21,9 +21,8 @@
 
     <div class="main">
         @include('layouts.parts._topbar')
-
-        <main class="content">
-        @yield('content')
+        <main class="content pt-4 ps-4 pe-4">
+            @yield('content')
         </main>
         @include('layouts.parts._footer')
         @include('layouts.parts._dialogs')
