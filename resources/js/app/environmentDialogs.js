@@ -4,7 +4,7 @@ import currentstate from "./currentstate.js";
 import swal from 'sweetalert'
 export class EnvironmentDialogs {
 
-    static events(environment) {
+    static events() {
         document.getElementById('inputAuthToken').addEventListener('change', (event) => {
             currentstate.set('authToken', event.target.value.trim());
         });
@@ -18,7 +18,7 @@ export class EnvironmentDialogs {
             bootstrap.Modal.getOrCreateInstance(document.getElementById('dialogAddNewEnv')).show();
         });
         document.getElementById('widgetEnvBtnEdit').addEventListener('click', (e) => {
-            let current = environment.items[environment.current];
+            let current = window.environment.items[window.environment.current];
             document.getElementById('dialogAddNewEnv_name').value = current['name'];
             document.getElementById('formAddNewEnv_old_name').value = current['name'];
             document.getElementById('dialogAddNewEnv_name').setAttribute('readonly', 'readonly');
@@ -35,13 +35,13 @@ export class EnvironmentDialogs {
                 icon: 'warning',
                 buttons: true
             }).then((value) => {
-                if (value && environment.items[environment.current].is_blocked === 0) {
-                    environment.destroyItem(environment.current)
+                if (value && window.environment.items[window.environment.current].is_blocked === 0) {
+                    window.environment.destroyItem(window.environment.current)
                         .then(result => {
                             if (result.success) {
-                                delete environment.items[environment.current];
-                                environment.current = Object.keys(environment.items)[0];
-                                environment.fetchItems();
+                                delete window.environment.items[window.environment.current];
+                                window.environment.current = Object.keys(window.environment.items)[0];
+                                window.environment.fetchItems();
                             }
                         });
                 }
@@ -53,24 +53,24 @@ export class EnvironmentDialogs {
             let form = new FormHelper('formAddNewEnv');
             let data = form.getData();
             if (!data.old_name) {
-                environment.storeItem(data)
+                window.environment.storeItem(data)
                     .then(result => {
                         if (result.success) {
                             form.resetValidation();
-                            currentstate.get('currentEnv', Object.keys(environment.items)[0])
-                                .then(response => {environment.current = response; environment.fetchItems();});
+                            currentstate.get('currentEnv', Object.keys(window.environment.items)[0])
+                                .then(response => {window.environment.current = response; window.environment.fetchItems();});
                             bootstrap.Modal.getInstance(document.getElementById('dialogAddNewEnv')).hide();
                         } else {
                             form.renderValidation(result.errors);
                         }
                     });
             } else {
-                environment.updateItem(data)
+                window.environment.updateItem(data)
                     .then(result => {
                         if (result.success) {
                             form.resetValidation();
-                            currentstate.get('currentEnv', Object.keys(environment.items)[0])
-                                .then(response => {environment.current = response; environment.fetchItems();});
+                            currentstate.get('currentEnv', Object.keys(window.environment.items)[0])
+                                .then(response => {window.environment.current = response; window.environment.fetchItems();});
                             bootstrap.Modal.getInstance(document.getElementById('dialogAddNewEnv')).hide();
                         } else {
                             form.renderValidation(result.errors);
@@ -85,7 +85,7 @@ export class EnvironmentDialogs {
 
         document.getElementById('widgetEnvList').addEventListener('click', (e) => {
             if (e.target && e.target.getAttribute('data-env-element')) {
-                environment.setCurrent( e.target.getAttribute('data-env-name'));
+                window.environment.setCurrent( e.target.getAttribute('data-env-name'));
             }
         });
     }

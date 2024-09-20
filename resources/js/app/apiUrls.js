@@ -10,6 +10,10 @@ export const apiUrls = {
     reports: {
         add: '/api/reports/add',
         search: '/api/reports',
+    },
+
+    statistic: {
+        metrics: '/api/statistic/metrics',
     }
 }
 

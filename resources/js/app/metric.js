@@ -1,0 +1,127 @@
+import toastr from "toastr";
+import * as bootstrap from 'bootstrap';
+import jsonPretty from "./jsonpretty.js";
+// window.bootstrap = bootstrap;
+
+export class Metric {
+
+    metrics = null;
+
+    constructor() {
+        this.events();
+    }
+
+    events() {
+        document.getElementById('btnGetMetrics').addEventListener('click', (event) => {
+            this.getMetrics();
+        });
+
+        document.getElementById('btnViewMetrics').addEventListener('click', (event) => {
+            if (this.metrics !== null) {
+                document.getElementById('dialogViewResponseTitle').innerHTML = 'View Metrics Response';
+                let body = document.getElementById('dialogViewResponseBody');
+                let code = document.getElementById('dialogViewResponseCode');
+                let header = document.getElementById('dialogViewResponseHeader');
+
+                code.innerHTML = jsonPretty.prettyPrint(this.metrics.status || 0);
+                body.innerHTML = jsonPretty.prettyPrint(this.metrics.body || {});
+                header.innerHTML = jsonPretty.prettyPrint(this.metrics.headers || {});
+
+                document.getElementById('dialogViewResponseBodyCollapse').classList.add('show');
+                document.getElementById('dialogViewResponseHeaderCollapse').classList.remove('show');
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('dialogViewResponse')).show();
+            }
+        });
+    }
+
+    async getMetrics() {
+        let metricsViewBtn = document.getElementById('btnViewMetrics');
+        let metricsResponse = await window.statistic.getMetrics().catch((error) => {
+            let allErrors = error.response.data.errors;
+            let errors = [];
+            for (let key in allErrors) {
+                errors = [...errors, ...allErrors[key]];
+            }
+            if (errors.length > 0) {
+                toastr.error("Metric request error", errors.join('<br>'));
+                this.metrics = {};
+                metricsViewBtn.classList.remove('btn-secondary');
+                metricsViewBtn.classList.remove('btn-success');
+                metricsViewBtn.classList.add('btn-danger');
+                this.clearMetrics();
+            }
+        });
+        if (metricsResponse !== undefined) {
+            this.metrics = metricsResponse.data.data;
+            if ((metricsResponse.data.success || false) && (metricsResponse.data.data.success || false)) {
+                metricsViewBtn.classList.remove('btn-secondary');
+                metricsViewBtn.classList.remove('btn-danger');
+                metricsViewBtn.classList.add('btn-success');
+                this.clearMetrics();
+                this.renderMetrics();
+            } else {
+                metricsViewBtn.classList.remove('btn-secondary');
+                metricsViewBtn.classList.remove('btn-success');
+                metricsViewBtn.classList.add('btn-danger');
+                this.clearMetrics();
+            }
+        }
+    }
+
+    clearMetrics() {
+        let wrapper = document.getElementById('metricsWrapper');
+        wrapper.innerText = '';
+    }
+
+    renderMetrics() {
+        let wrapper = document.getElementById('metricsWrapper');
+        let currentSection = null;
+        for (let section in this.metrics.body.data.sections) {
+            if (currentSection !== section) {
+                if (currentSection) {
+                    let br = document.createElement('div');
+                    br.style = 'width: 100%;';
+                    wrapper.append(br);
+                }
+                let div = document.createElement('div');
+                div.classList.add('h5');
+                div.classList.add('d-flex');
+                div.innerHTML = this.metrics.body.data.sections[section].name;
+                wrapper.append(div)
+                let br = document.createElement('div');
+                br.style = 'width: 100%;';
+                wrapper.append(br);
+                currentSection = section;
+            }
+            this.metrics.body.data.sections[section].metrics.forEach((metric) => {
+                let div = document.createElement('div');
+                div.classList.add('d-inline-flex');
+                div.classList.add('pt-1');
+                div.classList.add('pb-1');
+                div.classList.add('form-check');
+                div.classList.add('form-check-inline');
+                let cb = document.createElement('input');
+                cb.classList.add('form-check-input');
+                // cb.classList.add('mt-2');
+                cb.classList.add('me-1');
+                cb.setAttribute('type', 'checkbox');
+                cb.setAttribute('id', 'cbMetrics_'+metric);
+                cb.setAttribute('value', metric);
+                cb.setAttribute('cb-metric', metric);
+                if (this.metrics.body.data.metrics[metric].visible || false) {
+                    cb.setAttribute('checked', 'cbMetrics_'+metric);
+                }
+                div.append(cb);
+                let lbl = document.createElement('label');
+                lbl.classList.add('form-check-label');
+                // lbl.classList.add('p-1');
+                lbl.setAttribute('for', 'cbMetrics_'+metric);
+                lbl.innerHTML = this.metrics.body.data.metrics[metric].name;
+                div.append(lbl);
+                wrapper.append(div);
+            });
+        }
+    }
+}
+
+export default Metric;

@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CurrentState\ReportAddRequest;
 use App\Http\Requests\Api\CurrentState\StoreRequest;
-use App\Models\CurrentState;
 use App\Services\CurrentStateService;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

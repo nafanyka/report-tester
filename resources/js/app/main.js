@@ -2,7 +2,9 @@ import Environment from "./environment.js"
 import EnvironmentDialogs from "./environmentDialogs.js"
 import TomSelect from "tom-select";
 import apiUrls from "./apiUrls.js";
-import currentstate from "@/app/currentstate.js";
+import currentstate from "./currentstate.js";
+import Metric from "./metric.js";
+import {Statistic} from "./statistic.js";
 
 document.addEventListener('DOMContentLoaded', function(){
     window.axios.interceptors.request.use(function (config) {
@@ -19,9 +21,11 @@ document.addEventListener('DOMContentLoaded', function(){
         return Promise.reject(error);
     });
 
-    const environment = new Environment();
+    window.environment = new Environment();
+    window.statistic = new Statistic();
+    window.metric = new Metric();
 
-    EnvironmentDialogs.events(environment);
+    EnvironmentDialogs.events();
 
     new TomSelect("#selReport",{
         create: true,
@@ -43,6 +47,15 @@ document.addEventListener('DOMContentLoaded', function(){
                 .then(json => { callback(json.data)})
                 .catch(error => {callback();});
         }
+    });
+
+    new TomSelect('#selReportFormat', {
+        create: false,
+        onInitialize: function(){
+            currentstate.get('currentReportFormat', false)
+                .then(result => {if(result) {this.setValue(result);}});
+        },
+        onChange: function(option) { this.blur(); currentstate.set('currentReportFormat', option); },
     });
 
 

@@ -15,3 +15,7 @@ Route::prefix('/reports')->group(function () {
 });
 
 Route::apiResource('/env', \App\Http\Controllers\Api\EnvironmentController::class);
+
+Route::prefix('/statistic')->group(function () {
+    Route::post('/metrics', [\App\Http\Controllers\Api\StatisticController::class, 'metrics']);
+});

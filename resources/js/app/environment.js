@@ -1,6 +1,5 @@
 import axios from "axios";
 import apiUrls from "./apiUrls.js"
-import {Exception} from "sass";
 import currentstate from "./currentstate.js";
 
 export class Environment {

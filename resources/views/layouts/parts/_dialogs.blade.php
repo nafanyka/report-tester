@@ -43,3 +43,37 @@
     </div>
 </div>
 {{-- end add new env--}}
+
+<div class="modal fade" id="dialogViewResponse">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dialogViewResponseTitle">View</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div><span class="h5">Code:</span> <code id="dialogViewResponseCode"></code></div>
+                <div>
+                    <a data-bs-toggle="collapse" href="#dialogViewResponseBodyCollapse" aria-expanded="true" aria-controls="dialogViewResponseBodyCollapse">
+                        <span class="h5">Body:</span>
+                    </a>
+                </div>
+                <div class="collapse" id="dialogViewResponseBodyCollapse">
+                    <div class="card card-body p-0 m-0">
+                        <pre class="border border-secondary border-1 p-2"><code id="dialogViewResponseBody"></code></pre>
+                    </div>
+                </div>
+                <div>
+                    <a data-bs-toggle="collapse" href="#dialogViewResponseHeaderCollapse" aria-expanded="false" aria-controls="dialogViewResponseHeaderCollapse">
+                        <span class="h5">Headers:</span>
+                    </a>
+                </div>
+                <div class="collapse" id="dialogViewResponseHeaderCollapse">
+                    <div class="card card-body p-0 m-0">
+                        <pre class="border border-secondary border-1 p-2"><code id="dialogViewResponseHeader"></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
