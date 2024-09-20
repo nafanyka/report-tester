@@ -5,6 +5,9 @@
 
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
+            <div class="d-flex" style="width: 400px;">
+                <input class="form-control" type="text" placeholder="Auth Token" aria-label="Auth Token" id="inputAuthToken">
+            </div>
 
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" id="widgetEnvCurrent"></button>

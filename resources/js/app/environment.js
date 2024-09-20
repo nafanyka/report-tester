@@ -14,6 +14,8 @@ export class Environment {
     init() {
         currentstate.get('currentEnv', Object.keys(this.items)[0])
             .then(response => {this.current = response; this.fetchItems();});
+        currentstate.get('authToken')
+            .then(value => { document.getElementById('inputAuthToken').value = value; });
     }
 
     render() {

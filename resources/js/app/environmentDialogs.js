@@ -5,6 +5,9 @@ import swal from 'sweetalert'
 export class EnvironmentDialogs {
 
     static events(environment) {
+        document.getElementById('inputAuthToken').addEventListener('change', (event) => {
+            currentstate.set('authToken', event.target.value.trim());
+        });
         document.getElementById('widgetEnvBtnAdd').addEventListener('click', (e) => {
             document.getElementById('dialogAddNewEnv_name').value = '';
             document.getElementById('dialogAddNewEnv_name').removeAttribute('readonly');
