@@ -2,6 +2,7 @@
 @section('title', 'Report Tester')
 
 @section('content')
+    @include('layouts.parts._variables')
     <div class="container-fluid p-0">
         <div class="row">
             <div class="col col-5">
@@ -10,13 +11,17 @@
                         <div class="row">
                             <div class="col-6">
                                 <label for="selReport" class="form-label">Report</label>
-                                <select id="selReport" placeholder="Select a report..." autocomplete="off"></select>
+                                <select id="selReport" placeholder="Select a report..." autocomplete="off">
+                                    @foreach($reports as $report)
+                                        <option value="{{ $report }}" @if($report == $currentReport) selected @endif>{{ $report }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-6">
                                 <label for="selReportFormat" class="form-label">Report Format</label>
                                 <select id="selReportFormat" placeholder="Select a report format..." autocomplete="off">
-                                    @foreach(\App\Enums\ReportFormat::cases() as $env)
-                                        <option value="{!! $env->value !!}">{!! $env->value !!}</option>
+                                    @foreach(\App\Enums\ReportFormat::cases() as $reportFormat)
+                                        <option value="{!! $reportFormat->value !!}" @if($reportFormat->value == $currentReportFormat) selected @endif>{!! $reportFormat->value !!}</option>
                                     @endforeach
                                 </select>
                             </div>

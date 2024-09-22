@@ -11,10 +11,21 @@ export class Environment {
     }
 
     init() {
-        currentstate.get('currentEnv', Object.keys(this.items)[0])
-            .then(response => {this.current = response; this.fetchItems();});
-        currentstate.get('authToken')
-            .then(value => { document.getElementById('inputAuthToken').value = value; });
+        if (initEnvs && initCurrentEnv) {
+            this.items = initEnvs;
+            this.current = initCurrentEnv;
+            this.render();
+        } else {
+            currentstate.get('currentEnv', Object.keys(this.items)[0])
+                .then(response => {this.current = response; this.fetchItems();});
+        }
+
+        if (initAuthToken) {
+            document.getElementById('inputAuthToken').value = initAuthToken;
+        } else {
+            currentstate.get('authToken')
+                .then(value => { document.getElementById('inputAuthToken').value = value; });
+        }
     }
 
     render() {

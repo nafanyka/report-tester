@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     .then(result => {if(result) {this.setValue(result);}});
             }
         },
-        preload: true,
+        // preload: true,
         onChange: function(option) { this.blur(); currentstate.set('currentReport', option); },
         onOptionAdd: function(option) { axios.post(apiUrls.reports.add, {option: option}); },
         load: function (query, callback) {
@@ -51,10 +51,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
     new TomSelect('#selReportFormat', {
         create: false,
-        onInitialize: function(){
-            currentstate.get('currentReportFormat', false)
-                .then(result => {if(result) {this.setValue(result);}});
-        },
         onChange: function(option) { this.blur(); currentstate.set('currentReportFormat', option); },
     });
 
