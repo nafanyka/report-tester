@@ -1,13 +1,21 @@
 import toastr from "toastr";
 import * as bootstrap from 'bootstrap';
 import jsonPretty from "./jsonpretty.js";
+import currentstate from "./currentstate.js";
 // window.bootstrap = bootstrap;
 
 export class Metric {
+    timeout = null;
 
     metrics = null;
+    metricResponse = null;
 
     constructor() {
+        if (window.initMetrics && window.initMetrics.report == window.initCurrentReport) {
+            this.metrics = window.initMetrics.data;
+            window.initMetrics = null;
+            this.renderMetrics();
+        }
         this.events();
     }
 
@@ -17,19 +25,32 @@ export class Metric {
         });
 
         document.getElementById('btnViewMetrics').addEventListener('click', (event) => {
-            if (this.metrics !== null) {
+            if (this.metricResponse !== null) {
                 document.getElementById('dialogViewResponseTitle').innerHTML = 'View Metrics Response';
                 let body = document.getElementById('dialogViewResponseBody');
                 let code = document.getElementById('dialogViewResponseCode');
                 let header = document.getElementById('dialogViewResponseHeader');
 
-                code.innerHTML = jsonPretty.prettyPrint(this.metrics.status || 0);
-                body.innerHTML = jsonPretty.prettyPrint(this.metrics.body || {});
-                header.innerHTML = jsonPretty.prettyPrint(this.metrics.headers || {});
+                code.innerHTML = jsonPretty.prettyPrint(this.metricResponse.status || 0);
+                body.innerHTML = jsonPretty.prettyPrint(this.metricResponse.body || {});
+                header.innerHTML = jsonPretty.prettyPrint(this.metricResponse.headers || {});
 
                 document.getElementById('dialogViewResponseBodyCollapse').classList.add('show');
                 document.getElementById('dialogViewResponseHeaderCollapse').classList.remove('show');
                 bootstrap.Modal.getOrCreateInstance(document.getElementById('dialogViewResponse')).show();
+            }
+        });
+
+        document.getElementById('metricsWrapper').addEventListener('change', (event) => {
+            let target = event.target;
+            if (target.hasAttribute('cb-metric')) {
+                let checked = [...document.querySelectorAll('#metricsWrapper input:checked')].map(e => e.getAttribute('cb-metric'));
+                if (this.timeout) {
+                    clearTimeout(this.timeout);
+                }
+                this.timeout = setTimeout(() => {
+                    currentstate.set('metricsChecked', {report: document.getElementById('selReport').value, metrics: checked });
+                }, 2000);
             }
         });
     }
@@ -52,11 +73,13 @@ export class Metric {
             }
         });
         if (metricsResponse !== undefined) {
-            this.metrics = metricsResponse.data.data;
+            this.metrics = {};
+            this.metricResponse = metricsResponse.data.data;
             if ((metricsResponse.data.success || false) && (metricsResponse.data.data.success || false)) {
                 metricsViewBtn.classList.remove('btn-secondary');
                 metricsViewBtn.classList.remove('btn-danger');
                 metricsViewBtn.classList.add('btn-success');
+                this.metrics = metricsResponse.data.data.body.data;
                 this.clearMetrics();
                 this.renderMetrics();
             } else {
@@ -76,7 +99,7 @@ export class Metric {
     renderMetrics() {
         let wrapper = document.getElementById('metricsWrapper');
         let currentSection = null;
-        for (let section in this.metrics.body.data.sections) {
+        for (let section in this.metrics.sections) {
             if (currentSection !== section) {
                 if (currentSection) {
                     let br = document.createElement('div');
@@ -86,14 +109,14 @@ export class Metric {
                 let div = document.createElement('div');
                 div.classList.add('h5');
                 div.classList.add('d-flex');
-                div.innerHTML = this.metrics.body.data.sections[section].name;
+                div.innerHTML = this.metrics.sections[section].name;
                 wrapper.append(div)
                 let br = document.createElement('div');
                 br.style = 'width: 100%;';
                 wrapper.append(br);
                 currentSection = section;
             }
-            this.metrics.body.data.sections[section].metrics.forEach((metric) => {
+            this.metrics.sections[section].metrics.forEach((metric) => {
                 let div = document.createElement('div');
                 div.classList.add('d-inline-flex');
                 div.classList.add('pt-1');
@@ -108,7 +131,7 @@ export class Metric {
                 cb.setAttribute('id', 'cbMetrics_'+metric);
                 cb.setAttribute('value', metric);
                 cb.setAttribute('cb-metric', metric);
-                if (this.metrics.body.data.metrics[metric].visible || false) {
+                if (this.metrics.metrics[metric].visible || false) {
                     cb.setAttribute('checked', 'cbMetrics_'+metric);
                 }
                 div.append(cb);
@@ -116,7 +139,7 @@ export class Metric {
                 lbl.classList.add('form-check-label');
                 // lbl.classList.add('p-1');
                 lbl.setAttribute('for', 'cbMetrics_'+metric);
-                lbl.innerHTML = this.metrics.body.data.metrics[metric].name;
+                lbl.innerHTML = this.metrics.metrics[metric].name;
                 div.append(lbl);
                 wrapper.append(div);
             });

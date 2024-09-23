@@ -4,6 +4,7 @@ import TomSelect from "tom-select";
 import apiUrls from "./apiUrls.js";
 import currentstate from "./currentstate.js";
 import Metric from "./metric.js";
+import Slices from "./slices.js";
 import {Statistic} from "./statistic.js";
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function(){
     window.environment = new Environment();
     window.statistic = new Statistic();
     window.metric = new Metric();
+    window.slices = new Slices();
 
     EnvironmentDialogs.events();
 

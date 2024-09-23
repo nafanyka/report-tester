@@ -39,8 +39,8 @@
                                     <button id="btnViewMetrics" type="button" class="btn btn-secondary"><i data-feather="eye"></i></button>
                                 </div>
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-primary">Get Slices</button>
-                                    <button type="button" class="btn btn-secondary"><i data-feather="eye"></i></button>
+                                    <button id="btnGetSlices" type="button" class="btn btn-primary">Get Slices</button>
+                                    <button id="btnViewSlices" type="button" class="btn btn-secondary"><i data-feather="eye"></i></button>
                                 </div>
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-primary">Get Report ID</button>
@@ -66,6 +66,16 @@
             </div>
         </div>
 {{-- end metrics--}}
+{{-- slices--}}
+        <div class="row">
+            <div class="col col-12 m-0 pe-0">
+                <div class="card p-1 m-0">
+                    <div class="card-header p-2 h-4">Slices</div>
+                    <div class="card-body p-2 d-flex flex-wrap" id="slicesWrapper"></div>
+                </div>
+            </div>
+        </div>
+{{-- end slices--}}
 
     </div>
 @endsection

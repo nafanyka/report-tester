@@ -19,8 +19,17 @@ export class Statistic {
         return {...dataConfig};
     }
 
+    getSlicesFormsData() {
+        let dataConfig = this.getConfigFormsData();
+        return {...dataConfig};
+    }
+
     async getMetrics() {
         return axios.post(apiUrls.statistic.metrics, this.getMetricsFormsData());
+    }
+
+    async getSlices() {
+        return axios.post(apiUrls.statistic.slices, this.getSlicesFormsData());
     }
 }
 

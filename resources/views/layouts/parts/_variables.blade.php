@@ -14,5 +14,10 @@
     @if(!empty($envs))
     var initEnvs = {{\Illuminate\Support\Js::from($envs) }};
     @endif
-    console.log(initAuthToken, initCurrentEnv, initCurrentReportFormat, initCurrentReport, initReports, initEnvs);
+    @if(!empty($metrics))
+    var initMetrics = {{\Illuminate\Support\Js::from($metrics) }};
+    @endif
+    @if(!empty($slices))
+    var initSlices = {{\Illuminate\Support\Js::from($slices) }};
+    @endif
 </script>

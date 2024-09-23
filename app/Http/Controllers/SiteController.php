@@ -16,7 +16,10 @@ class SiteController extends Controller
         $currentReport = CurrentStateService::getCurrentState('currentReport');
         $reports = CurrentStateService::getCurrentState('reports');
         $envs = Environment::all()->keyBy('name')->toArray();
+        //
+        $metrics = CurrentStateService::getCurrentState('metrics');
+        $slices = CurrentStateService::getCurrentState('slices');
 
-        return view('index', compact('currentEnv', 'authToken', 'currentReportFormat', 'currentReport', 'reports', 'envs'));
+        return view('index', compact('currentEnv', 'authToken', 'currentReportFormat', 'currentReport', 'reports', 'envs', 'metrics', 'slices'));
     }
 }

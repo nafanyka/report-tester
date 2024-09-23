@@ -48,11 +48,40 @@ class StatisticRequestService
             $this->response['headers'] = $response->headers();
             $this->response['status'] = $response->getStatusCode();
             $this->response['body'] = $response->json();
+            if (($this->response['body']['success'] ?? false) && !empty($this->response['body']['data'])) {
+                CurrentStateService::setCurrentState('metrics', ['report' => $this->request->report, 'data' => $this->response['body']['data']]);
+            } else {
+                CurrentStateService::setCurrentState('metrics', []);
+            }
             return $this->response;
         } catch (\Exception $e) {
             $this->response['body'] = json_encode($e->getMessage());
             return $this->response;
         }
     }
+
+    public function requestSlices()
+    {
+        $url = $this->env->domain . 'api/statistics/ssp2/dictionary/slice?limit=25&page=1&type=' . $this->request->report;
+
+        try {
+            $response = Http::withHeaders($this->generateHeaders())->get($url);
+            $this->response['success'] = $response->getStatusCode() == 200;
+            $this->response['headers'] = $response->headers();
+            $this->response['status'] = $response->getStatusCode();
+            $this->response['body'] = $response->json();
+            if (($this->response['body']['success'] ?? false) && !empty($this->response['body']['data'])) {
+                CurrentStateService::setCurrentState('slices', ['report' => $this->request->report, 'data' => $this->response['body']['data']]);
+            } else {
+                CurrentStateService::setCurrentState('slices', []);
+            }
+            return $this->response;
+        } catch (\Exception $e) {
+            $this->response['body'] = json_encode($e->getMessage());
+            return $this->response;
+        }
+    }
+
+
 
 }
