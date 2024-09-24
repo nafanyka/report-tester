@@ -6,7 +6,7 @@
     <div class="container-fluid p-0">
         <div class="row">
             <div class="col col-5">
-                <div class="card mb-3">
+                <div class="card mb-2">
                     <div class="card-body p-2">
                         <div class="row">
                             <div class="col-6">
@@ -60,18 +60,32 @@
         <div class="row">
             <div class="col col-12 m-0 pe-0">
                 <div class="card p-1 m-0">
-                    <div class="card-header p-2 h-4">Metrics</div>
-                    <div class="card-body p-2 d-flex flex-wrap" id="metricsWrapper"></div>
+                    <div class="card-header p-2 h-4">
+                        <a data-bs-toggle="collapse" href="#metricsWrapperBody" aria-expanded="true" aria-controls="metricsWrapperBody" id="metricsWrapperHeader">
+                            <i data-feather="chevron-down" class="float-end fa"></i>
+                            Metrics
+                        </a>
+                    </div>
+                    <div id="metricsWrapperBody" class="collapse show" aria-labelledby="metricsWrapperHeader">
+                        <div class="card-body p-2 d-flex flex-wrap" id="metricsWrapper"></div>
+                    </div>
                 </div>
             </div>
         </div>
 {{-- end metrics--}}
 {{-- slices--}}
         <div class="row">
-            <div class="col col-12 m-0 pe-0">
+            <div class="col col-12 m-0 pe-0 mt-2">
                 <div class="card p-1 m-0">
-                    <div class="card-header p-2 h-4">Slices</div>
-                    <div class="card-body p-2 d-flex flex-wrap" id="slicesWrapper"></div>
+                    <div class="card-header p-2 h-4">
+                        <a data-bs-toggle="collapse" href="#slicesWrapperBody" aria-expanded="true" aria-controls="slicesWrapperBody" id="slicesWrapperHeader">
+                            <i data-feather="chevron-down" class="float-end fa"></i>
+                            Slices
+                        </a>
+                    </div>
+                    <div id="slicesWrapperBody" class="collapse show" aria-labelledby="slicesWrapperHeader">
+                        <div class="card-body p-2 d-flex flex-wrap" id="slicesWrapper"></div>
+                    </div>
                 </div>
             </div>
         </div>

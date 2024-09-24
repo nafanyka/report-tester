@@ -19,7 +19,10 @@ class SiteController extends Controller
         //
         $metrics = CurrentStateService::getCurrentState('metrics');
         $slices = CurrentStateService::getCurrentState('slices');
+        //
+        $selectedMetrics = CurrentStateService::getCurrentState('metricsChecked');
+        $selectedSlices = CurrentStateService::getCurrentState('slicesChecked');
 
-        return view('index', compact('currentEnv', 'authToken', 'currentReportFormat', 'currentReport', 'reports', 'envs', 'metrics', 'slices'));
+        return view('index', compact('currentEnv', 'authToken', 'currentReportFormat', 'currentReport', 'reports', 'envs', 'metrics', 'slices', 'selectedMetrics', 'selectedSlices'));
     }
 }

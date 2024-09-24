@@ -1,7 +1,7 @@
 import toastr from "toastr";
 import * as bootstrap from 'bootstrap';
 import jsonPretty from "./jsonpretty.js";
-import currentstate from "@/app/currentstate.js";
+import currentstate from "./currentstate.js";
 // window.bootstrap = bootstrap;
 
 export class Slices {
@@ -15,7 +15,7 @@ export class Slices {
         if (window.initSlices && window.initSlices.report === window.initCurrentReport) {
             this.slices = window.initSlices.data;
             window.initSlices = null;
-            this.renderSlices();
+            this.renderSlices(true);
         }
         this.events();
     }
@@ -50,8 +50,13 @@ export class Slices {
                     clearTimeout(this.timeout);
                 }
                 this.timeout = setTimeout(() => {
-                    currentstate.set('slicesChecked', {report: document.getElementById('selReport').value, slices: checked });
-                }, 2000);
+                    currentstate.set('slicesChecked', {report: document.getElementById('selReport').value, slices: checked })
+                        .then(() => {
+                            currentstate.get('slicesChecked').then(response => {
+                                window.initSelectedSlices = response;
+                            });
+                    });
+                }, 1500);
             }
         });
     }
@@ -98,7 +103,7 @@ export class Slices {
         wrapper.innerText = '';
     }
 
-    renderSlices() {
+    renderSlices(init = false) {
         let wrapper = document.getElementById('slicesWrapper');
 
         this.slices.forEach((slice) => {
@@ -118,7 +123,16 @@ export class Slices {
             cb.setAttribute('cb-slice', slice.id);
             let lbl = document.createElement('label');
             lbl.classList.add('btn');
-            if (slice.is_visible) {
+            //
+            if (
+                window.initSelectedSlices &&
+                (window.initSelectedSlices.report == window.initCurrentReport || window.initSelectedSlices.report == document.getElementById('selReport').value) &&
+                window.initSelectedSlices.slices.includes(slice.id)
+            ) {
+                cb.setAttribute('checked', 'checked');
+            }
+            //
+            if (slice.is_visible || false) {
                 lbl.classList.add('btn-outline-primary');
             } else {
                 lbl.classList.add('btn-outline-secondary');

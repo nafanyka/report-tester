@@ -20,4 +20,10 @@
     @if(!empty($slices))
     var initSlices = {{\Illuminate\Support\Js::from($slices) }};
     @endif
+    @if(!empty($selectedMetrics))
+    var initSelectedMetrics = {{\Illuminate\Support\Js::from($selectedMetrics) }};
+    @endif
+    @if(!empty($selectedSlices))
+    var initSelectedSlices = {{\Illuminate\Support\Js::from($selectedSlices) }};
+    @endif
 </script>

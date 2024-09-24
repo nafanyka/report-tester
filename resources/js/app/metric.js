@@ -14,7 +14,7 @@ export class Metric {
         if (window.initMetrics && window.initMetrics.report == window.initCurrentReport) {
             this.metrics = window.initMetrics.data;
             window.initMetrics = null;
-            this.renderMetrics();
+            this.renderMetrics(true);
         }
         this.events();
     }
@@ -49,8 +49,13 @@ export class Metric {
                     clearTimeout(this.timeout);
                 }
                 this.timeout = setTimeout(() => {
-                    currentstate.set('metricsChecked', {report: document.getElementById('selReport').value, metrics: checked });
-                }, 2000);
+                    currentstate.set('metricsChecked', {report: document.getElementById('selReport').value, metrics: checked })
+                        .then(() => {
+                            currentstate.get('metricsChecked').then(response => {
+                                window.initSelectedMetrics = response;
+                            });
+                        });
+                }, 1500);
             }
         });
     }
@@ -96,7 +101,7 @@ export class Metric {
         wrapper.innerText = '';
     }
 
-    renderMetrics() {
+    renderMetrics(init = false) {
         let wrapper = document.getElementById('metricsWrapper');
         let currentSection = null;
         for (let section in this.metrics.sections) {
@@ -131,8 +136,12 @@ export class Metric {
                 cb.setAttribute('id', 'cbMetrics_'+metric);
                 cb.setAttribute('value', metric);
                 cb.setAttribute('cb-metric', metric);
-                if (this.metrics.metrics[metric].visible || false) {
-                    cb.setAttribute('checked', 'cbMetrics_'+metric);
+                if (
+                    window.initSelectedMetrics &&
+                    (window.initSelectedMetrics.report == window.initCurrentReport || window.initSelectedMetrics.report == document.getElementById('selReport').value) &&
+                    window.initSelectedMetrics.metrics.includes(metric)
+                ) {
+                    cb.setAttribute('checked', 'checked');
                 }
                 div.append(cb);
                 let lbl = document.createElement('label');

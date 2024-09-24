@@ -9,8 +9,8 @@ export class CurrentState {
             .catch(error => { return defaultValue;});
     }
 
-    static set(key, value) {
-        axios.post(apiUrls.currentstate.set, {data: [{key: key, value: value}]})
+    static async set(key, value) {
+        return await axios.post(apiUrls.currentstate.set, {data: [{key: key, value: value}]})
             .then(response => {})
             .catch(error => {});
     }
