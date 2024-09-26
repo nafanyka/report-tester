@@ -15,7 +15,11 @@ export const apiUrls = {
     statistic: {
         metrics: '/api/statistic/metrics',
         slices: '/api/statistic/slices',
-    }
+    },
+
+    filter: '/api/statistic/filter',
+
+    reportConfig: '/api/report-config',
 }
 
 export default apiUrls;

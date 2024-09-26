@@ -20,3 +20,8 @@ Route::prefix('/statistic')->group(function () {
     Route::post('/metrics', [\App\Http\Controllers\Api\StatisticController::class, 'metrics']);
     Route::post('/slices', [\App\Http\Controllers\Api\StatisticController::class, 'slices']);
 });
+
+Route::prefix('/report-config')->group(function () {
+    Route::get('/{report}/{instance}/{type}', [\App\Http\Controllers\Api\ReportConfigController::class, 'show']);
+    Route::post('/{report}/{instance}/{type}', [\App\Http\Controllers\Api\ReportConfigController::class, 'store']);
+});

@@ -14,3 +14,11 @@
 .card-header .collapsed .fa {
     transform: rotate(90deg);
 }
+
+.input-group-sm > .plugin-remove_button > .ts-control {
+    padding-top: 2px !important;
+}
+.nav-item .ts-control {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}

@@ -4,25 +4,20 @@ import currentstate from "./currentstate.js";
 
 export class Environment {
     items = {};
-    current;
+    current = null;
 
     constructor() {
-        this.init();
     }
 
     init() {
-        if (initEnvs && initCurrentEnv) {
-            this.items = initEnvs;
-            this.current = initCurrentEnv;
-            this.render();
-        } else {
+        if (!this.items || !this.current) {
             currentstate.get('currentEnv', Object.keys(this.items)[0])
                 .then(response => {this.current = response; this.fetchItems();});
+        } else {
+            this.render();
         }
 
-        if (initAuthToken) {
-            document.getElementById('inputAuthToken').value = initAuthToken;
-        } else {
+        if (document.getElementById('inputAuthToken').value.length == 0) {
             currentstate.get('authToken')
                 .then(value => { document.getElementById('inputAuthToken').value = value; });
         }
@@ -46,12 +41,14 @@ export class Environment {
     }
 
     setCurrent(current) {
+        if (current != this.current) {
+            currentstate.set('currentEnv', current);
+        }
         if (this.items[current] === undefined) {
             this.current = Object.keys(this.items)[0];
         } else {
             this.current = current;
         }
-        currentstate.set('currentEnv', this.current);
         let envButton = document.getElementById('widgetEnvCurrent');
         envButton.innerText = this.items[this.current]['description'];
         if (this.items[this.current]['is_blocked']) {

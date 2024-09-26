@@ -1,7 +1,7 @@
 import toastr from "toastr";
 import * as bootstrap from 'bootstrap';
 import jsonPretty from "./jsonpretty.js";
-import currentstate from "./currentstate.js";
+import ReportConfig from "./reportconfig.js";
 // window.bootstrap = bootstrap;
 
 export class Metric {
@@ -9,11 +9,12 @@ export class Metric {
 
     metrics = null;
     metricResponse = null;
+    checked = null;
 
-    constructor() {
-        if (window.initMetrics && window.initMetrics.report == window.initCurrentReport) {
-            this.metrics = window.initMetrics.data;
-            window.initMetrics = null;
+    constructor() {}
+
+    init() {
+        if (this.metrics) {
             this.renderMetrics(true);
         }
         this.events();
@@ -48,13 +49,9 @@ export class Metric {
                 if (this.timeout) {
                     clearTimeout(this.timeout);
                 }
+                this.checked = checked;
                 this.timeout = setTimeout(() => {
-                    currentstate.set('metricsChecked', {report: document.getElementById('selReport').value, metrics: checked })
-                        .then(() => {
-                            currentstate.get('metricsChecked').then(response => {
-                                window.initSelectedMetrics = response;
-                            });
-                        });
+                    ReportConfig.set(document.getElementById('selReport').value, 'selected_metrics', 'default', checked);
                 }, 1500);
             }
         });
@@ -136,11 +133,7 @@ export class Metric {
                 cb.setAttribute('id', 'cbMetrics_'+metric);
                 cb.setAttribute('value', metric);
                 cb.setAttribute('cb-metric', metric);
-                if (
-                    window.initSelectedMetrics &&
-                    (window.initSelectedMetrics.report == window.initCurrentReport || window.initSelectedMetrics.report == document.getElementById('selReport').value) &&
-                    window.initSelectedMetrics.metrics.includes(metric)
-                ) {
+                if (this.checked.includes(metric)) {
                     cb.setAttribute('checked', 'checked');
                 }
                 div.append(cb);

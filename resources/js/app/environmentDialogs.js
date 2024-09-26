@@ -81,8 +81,6 @@ export class EnvironmentDialogs {
 
         });
 
-        document.addEventListener('click', (e) => {})
-
         document.getElementById('widgetEnvList').addEventListener('click', (e) => {
             if (e.target && e.target.getAttribute('data-env-element')) {
                 window.environment.setCurrent( e.target.getAttribute('data-env-name'));

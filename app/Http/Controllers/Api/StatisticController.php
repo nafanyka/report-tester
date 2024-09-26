@@ -12,9 +12,8 @@ class StatisticController extends Controller
     public function metrics(MetricsRequest $request, StatisticRequestService $service)
     {
         return response()->json($service->requestMetrics());
-//
-//        dump($request->all());
     }
+
     public function slices(SlicesRequest $request, StatisticRequestService $service)
     {
         return response()->json($service->requestSlices());

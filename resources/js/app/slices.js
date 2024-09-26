@@ -1,20 +1,25 @@
 import toastr from "toastr";
 import * as bootstrap from 'bootstrap';
 import jsonPretty from "./jsonpretty.js";
-import currentstate from "./currentstate.js";
+import moment from "moment";
+import TomSelect from "tom-select";
+import apiUrls from "@/app/apiUrls.js";
+import ReportConfig from "@/app/reportconfig.js";
 // window.bootstrap = bootstrap;
 
 export class Slices {
-
     slices = null;
     sliceResponse = null;
 
+    checked = null;
+
+
     timeout = null;
 
-    constructor() {
-        if (window.initSlices && window.initSlices.report === window.initCurrentReport) {
-            this.slices = window.initSlices.data;
-            window.initSlices = null;
+    constructor() {}
+
+    init() {
+        if (this.slices) {
             this.renderSlices(true);
         }
         this.events();
@@ -44,18 +49,15 @@ export class Slices {
 
         document.getElementById('slicesWrapper').addEventListener('change', (event) => {
             let target = event.target;
+            this.renderFilter(event.target.getAttribute('cb-slice'), event.target.checked);
             if (target.hasAttribute('cb-slice')) {
                 let checked = [...document.querySelectorAll('#slicesWrapper input:checked')].map(e => e.getAttribute('cb-slice'));
                 if (this.timeout) {
                     clearTimeout(this.timeout);
                 }
+                this.checked = checked;
                 this.timeout = setTimeout(() => {
-                    currentstate.set('slicesChecked', {report: document.getElementById('selReport').value, slices: checked })
-                        .then(() => {
-                            currentstate.get('slicesChecked').then(response => {
-                                window.initSelectedSlices = response;
-                            });
-                    });
+                    ReportConfig.set(document.getElementById('selReport').value, 'selected_slices', 'default', checked);
                 }, 1500);
             }
         });
@@ -101,6 +103,9 @@ export class Slices {
     clearSlices() {
         let wrapper = document.getElementById('slicesWrapper');
         wrapper.innerText = '';
+
+        let filterWrapper = document.getElementById('filtersWrapper');
+        filterWrapper.innerText = '';
     }
 
     renderSlices(init = false) {
@@ -124,12 +129,11 @@ export class Slices {
             let lbl = document.createElement('label');
             lbl.classList.add('btn');
             //
-            if (
-                window.initSelectedSlices &&
-                (window.initSelectedSlices.report == window.initCurrentReport || window.initSelectedSlices.report == document.getElementById('selReport').value) &&
-                window.initSelectedSlices.slices.includes(slice.id)
-            ) {
+            if (this.checked.includes(slice.id)) {
                 cb.setAttribute('checked', 'checked');
+                this.renderFilter(slice.id, true);
+            } else {
+                this.renderFilter(slice.id, false);
             }
             //
             if (slice.is_visible || false) {
@@ -143,6 +147,83 @@ export class Slices {
             div.append(lbl);
             wrapper.append(div);
         });
+    }
+
+    renderFilter(slice, enable = false) {
+        if (enable) {
+            const sliceConfig = this.slices.find((element) => element.id === slice);
+            if (sliceConfig == undefined) return;
+            let wrapper = document.getElementById('filtersWrapper');
+            let div = document.createElement('div');
+            div.className = 'd-inline-flex pt-1 pb-1 ps-0 me-4';
+            div.setAttribute('id', 'sliceFilterWrapper_'+slice);
+            let lbl = document.createElement('label');
+            lbl.className = 'form-check-label me-1 mt-1 text-nowrap';
+            lbl.setAttribute('for', 'sliceFilter_'+slice);
+            lbl.innerHTML = sliceConfig.name;
+            div.append(lbl);
+            //
+            if (slice == 'date') {
+                div.innerHTML = div.innerHTML + '<input type="hidden" value="" data-filter="date_from" id="filter_date_from"><input type="hidden" value="" data-filter="date_to" id="filter_date_to">';
+                div.innerHTML = div.innerHTML + '<input type="text" class="flatpickr flatpickr-input input-control-sm" id="sliceFilter_'+slice+'">';
+                wrapper.appendChild(div);
+
+                flatpickr('#sliceFilter_'+slice, {
+                    mode: "range",
+                    ariaDateFormat: "Y-m-d",
+                    dateFormat: "Y-m-d",
+                    defaultDate: [
+                        moment().format('YYYY-MM-DD'),
+                        moment().format('YYYY-MM-DD'),
+                    ],
+                    onChange: function (dates) {
+                        if (dates.length == 2) {
+                            document.getElementById('filter_date_from').value = moment(dates[0]).format('YYYY-MM-DD')
+                            document.getElementById('filter_date_to').value = moment(dates[1]).format('YYYY-MM-DD');
+                        }
+                    },
+                    onReady: function (dates) {
+                        document.getElementById('filter_date_from').value = moment(dates[0]).format('YYYY-MM-DD')
+                        document.getElementById('filter_date_to').value = moment(dates[1]).format('YYYY-MM-DD');
+                    },
+                });
+            } else {
+                let inp = '<div class="input-group input-group-sm">'
+                    +'<input type="text" id="sliceFilter_'+slice+'" multiple>'
+                    +'<button type="button" class="btn btn-secondary">'+feather.icons.eye.toSvg()+'</button>'
+                    +'</div>';
+                div.innerHTML = div.innerHTML + inp;
+                wrapper.append(div);
+
+                const r = new TomSelect('#sliceFilter_'+slice,{
+                    create: false,
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name', 'id'],
+                    preload: 'focus',
+                    plugins: ['input_autogrow', 'remove_button'],
+                    onChange: function(option) {
+                        this.blur();
+                    //     currentstate.set('currentReport', option);
+                    //     window.initSelectedMetrics = null;
+                    //     window.initSelectedSlices = null;
+                    //     window.initMetrics = null;
+                    //     window.initSlices = null;
+                    },
+                    load: function (query, callback) {
+                        fetch(apiUrls.reports.search + '?q=' + encodeURIComponent(query))
+                            .then(response => response.json())
+                            .then(json => { callback(json.data)})
+                            .catch(error => {callback();});
+                    }
+                });
+            }
+        } else {
+            let e = document.getElementById('sliceFilterWrapper_'+slice);
+            if (e) {
+                e.parentNode.removeChild(e);
+            }
+        }
     }
 }
 

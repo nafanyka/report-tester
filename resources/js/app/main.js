@@ -6,8 +6,18 @@ import currentstate from "./currentstate.js";
 import Metric from "./metric.js";
 import Slices from "./slices.js";
 import {Statistic} from "./statistic.js";
+import ReportConfig from "./reportconfig.js";
+
+window.environment = new Environment();
+window.statistic = new Statistic();
+window.metrics = new Metric();
+window.slices = new Slices();
 
 document.addEventListener('DOMContentLoaded', function(){
+    window.environment.init();
+    window.metrics.init();
+    window.slices.init();
+    //
     window.axios.interceptors.request.use(function (config) {
         document.getElementById('globalLoader').removeAttribute('hidden');
         return config
@@ -22,10 +32,7 @@ document.addEventListener('DOMContentLoaded', function(){
         return Promise.reject(error);
     });
 
-    window.environment = new Environment();
-    window.statistic = new Statistic();
-    window.metric = new Metric();
-    window.slices = new Slices();
+
 
     EnvironmentDialogs.events();
 
@@ -41,7 +48,33 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         },
         // preload: true,
-        onChange: function(option) { this.blur(); currentstate.set('currentReport', option); },
+        plugins: ['input_autogrow'],
+        onChange: function(option) {
+            this.blur();
+            currentstate.set('currentReport', option);
+            Promise.all([
+                ReportConfig.get(option, 'metrics', 'default', {})
+                    .then(result => {window.metrics.metrics = result})
+                    .catch(window.metrics.metrics = {}),
+                ReportConfig.get(option, 'selected_metrics', 'default', [])
+                    .then(result => {window.metrics.checked = result})
+                    .catch(window.metrics.checked = [])
+            ]).then(() => {
+                metrics.clearMetrics();
+                metrics.renderMetrics();
+            });
+            Promise.all([
+                ReportConfig.get(option, 'slices', 'default', [])
+                    .then(result => {window.slices.slices = result})
+                    .catch(window.slices.slices = []),
+                ReportConfig.get(option, 'selected_slices', 'default', [])
+                    .then(result => {window.slices.checked = result})
+                    .catch(window.slices.checked = [])
+            ]).then(() => {
+                slices.clearSlices();
+                slices.renderSlices();
+            });
+        },
         onOptionAdd: function(option) { axios.post(apiUrls.reports.add, {option: option}); },
         load: function (query, callback) {
             fetch(apiUrls.reports.search + '?q=' + encodeURIComponent(query))
@@ -53,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     new TomSelect('#selReportFormat', {
         create: false,
+        plugins: ['input_autogrow'],
         onChange: function(option) { this.blur(); currentstate.set('currentReportFormat', option); },
     });
 

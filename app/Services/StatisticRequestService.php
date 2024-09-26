@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ReportConfigType;
 use App\Models\Environment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -49,9 +50,9 @@ class StatisticRequestService
             $this->response['status'] = $response->getStatusCode();
             $this->response['body'] = $response->json();
             if (($this->response['body']['success'] ?? false) && !empty($this->response['body']['data'])) {
-                CurrentStateService::setCurrentState('metrics', ['report' => $this->request->report, 'data' => $this->response['body']['data']]);
+                ReportConfigService::setReportConfig($this->request->report, ReportConfigType::METRICS->value, $this->request->instance ?? 'default', $this->response['body']['data']);
             } else {
-                CurrentStateService::setCurrentState('metrics', []);
+                ReportConfigService::setReportConfig($this->request->report, ReportConfigType::METRICS->value, $this->request->instance ?? 'default', []);
             }
             return $this->response;
         } catch (\Exception $e) {
@@ -71,9 +72,9 @@ class StatisticRequestService
             $this->response['status'] = $response->getStatusCode();
             $this->response['body'] = $response->json();
             if (($this->response['body']['success'] ?? false) && !empty($this->response['body']['data'])) {
-                CurrentStateService::setCurrentState('slices', ['report' => $this->request->report, 'data' => $this->response['body']['data']]);
+                ReportConfigService::setReportConfig($this->request->report, ReportConfigType::SLICES->value, $this->request->instance ?? 'default', $this->response['body']['data']);
             } else {
-                CurrentStateService::setCurrentState('slices', []);
+                ReportConfigService::setReportConfig($this->request->report, ReportConfigType::SLICES->value, $this->request->instance ?? 'default', []);
             }
             return $this->response;
         } catch (\Exception $e) {
