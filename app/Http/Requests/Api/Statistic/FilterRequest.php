@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class MetricsRequest extends FormRequest
+class FilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,6 +28,9 @@ class MetricsRequest extends FormRequest
         return [
             'authToken'         => ['required', 'string', ],
             'report'            => ['required', 'string', ],
+            'slices'            => ['required', 'array', ],
+            'slice'             => ['required', 'string', ],
+            'q'                 => ['nullable', 'string', ],
             'env'               => ['required', 'string', Rule::exists('environments', 'name')],
         ];
     }

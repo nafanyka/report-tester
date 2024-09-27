@@ -2,7 +2,7 @@ import axios from "axios";
 import apiUrls from "./apiUrls.js"
 import currentstate from "./currentstate.js";
 
-export class Environment {
+export default class Environment {
     items = {};
     current = null;
 
@@ -17,7 +17,7 @@ export class Environment {
             this.render();
         }
 
-        if (document.getElementById('inputAuthToken').value.length == 0) {
+        if (document.getElementById('inputAuthToken').value.length === 0) {
             currentstate.get('authToken')
                 .then(value => { document.getElementById('inputAuthToken').value = value; });
         }
@@ -33,7 +33,7 @@ export class Environment {
             link.className = 'dropdown-item';
             link.setAttribute('href', '#');
             link.setAttribute('data-env-name', name);
-            link.setAttribute('data-env-element', true);
+            link.setAttribute('data-env-element', 'true');
             li.appendChild(link);
             envList.appendChild(li);
         });
@@ -41,7 +41,7 @@ export class Environment {
     }
 
     setCurrent(current) {
-        if (current != this.current) {
+        if (current !== this.current) {
             currentstate.set('currentEnv', current);
         }
         if (this.items[current] === undefined) {
@@ -75,7 +75,7 @@ export class Environment {
     }
     async storeItem(data) {
         return await axios.post(apiUrls.env, data)
-            .then(response => {
+            .then(() => {
                 return {success: true, message: ''};
             })
             .catch(error => {
@@ -84,7 +84,7 @@ export class Environment {
     }
     async updateItem(data) {
         return await axios.put(apiUrls.env + data.old_name, data)
-            .then(response => {
+            .then(() => {
                 return {success: true, message: ''};
             })
             .catch(error => {
@@ -93,7 +93,7 @@ export class Environment {
     }
     async destroyItem(name) {
         return await axios.delete(apiUrls.env + name)
-            .then(response => {
+            .then(() => {
                 return {success: true, message: ''};
             })
             .catch(error => {
@@ -103,6 +103,3 @@ export class Environment {
 
 
 }
-
-
-export default Environment;

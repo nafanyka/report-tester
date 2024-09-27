@@ -1,4 +1,4 @@
-export class FormHelper {
+export default class FormHelper {
     constructor(formId) {
         this.formId = formId;
         this.form = document.getElementById(formId);
@@ -43,5 +43,3 @@ export class FormHelper {
         }
     }
 }
-
-export default FormHelper

@@ -1,14 +1,14 @@
 import * as bootstrap from 'bootstrap';
-import FormHelper from "./form-helper.js";
-import currentstate from "./currentstate.js";
 import swal from 'sweetalert'
-export class EnvironmentDialogs {
+import FormHelper from "./helpers/form-helper.js";
+import currentstate from "./currentstate.js";
+export default class EnvironmentDialogs {
 
     static events() {
         document.getElementById('inputAuthToken').addEventListener('change', (event) => {
             currentstate.set('authToken', event.target.value.trim());
         });
-        document.getElementById('widgetEnvBtnAdd').addEventListener('click', (e) => {
+        document.getElementById('widgetEnvBtnAdd').addEventListener('click', () => {
             document.getElementById('dialogAddNewEnv_name').value = '';
             document.getElementById('dialogAddNewEnv_name').removeAttribute('readonly');
             document.getElementById('dialogAddNewEnv_desc').value = '';
@@ -17,7 +17,7 @@ export class EnvironmentDialogs {
             document.getElementById('formAddNewEnv_old_name').value = '';
             bootstrap.Modal.getOrCreateInstance(document.getElementById('dialogAddNewEnv')).show();
         });
-        document.getElementById('widgetEnvBtnEdit').addEventListener('click', (e) => {
+        document.getElementById('widgetEnvBtnEdit').addEventListener('click', () => {
             let current = window.environment.items[window.environment.current];
             document.getElementById('dialogAddNewEnv_name').value = current['name'];
             document.getElementById('formAddNewEnv_old_name').value = current['name'];
@@ -27,7 +27,7 @@ export class EnvironmentDialogs {
             document.getElementById('dialogAddNewEnv_env').value = current['env'];
             bootstrap.Modal.getOrCreateInstance(document.getElementById('dialogAddNewEnv')).show();
         });
-        document.getElementById('widgetEnvBtnDelete').addEventListener('click', (e) => {
+        document.getElementById('widgetEnvBtnDelete').addEventListener('click', () => {
             swal({
                 title: 'Are you sure?',
                 text: 'Delete environment',
@@ -49,7 +49,7 @@ export class EnvironmentDialogs {
         });
 
 
-        document.getElementById('dialogAddNewEnv_btnSave').addEventListener('click', (e) => {
+        document.getElementById('dialogAddNewEnv_btnSave').addEventListener('click', () => {
             let form = new FormHelper('formAddNewEnv');
             let data = form.getData();
             if (!data.old_name) {
@@ -88,5 +88,3 @@ export class EnvironmentDialogs {
         });
     }
 }
-
-export default EnvironmentDialogs;

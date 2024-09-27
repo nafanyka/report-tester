@@ -3,14 +3,14 @@ import EnvironmentDialogs from "./environmentDialogs.js"
 import TomSelect from "tom-select";
 import apiUrls from "./apiUrls.js";
 import currentstate from "./currentstate.js";
-import Metric from "./metric.js";
-import Slices from "./slices.js";
-import {Statistic} from "./statistic.js";
+import Metrics from "./metrics/metrics.js";
+import Slices from "./slices/slices.js";
+import Statistic from "./statistic.js";
 import ReportConfig from "./reportconfig.js";
 
 window.environment = new Environment();
 window.statistic = new Statistic();
-window.metrics = new Metric();
+window.metrics = new Metrics();
 window.slices = new Slices();
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function(){
         labelField: 'name',
         searchField: 'name',
         onLoad: function(){
-            if (this.getValue() == '') {
+            if (this.getValue() === '') {
                 currentstate.get('currentReport', false)
                     .then(result => {if(result) {this.setValue(result);}});
             }
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function(){
             fetch(apiUrls.reports.search + '?q=' + encodeURIComponent(query))
                 .then(response => response.json())
                 .then(json => { callback(json.data)})
-                .catch(error => {callback();});
+                .catch(() => {callback();});
         }
     });
 

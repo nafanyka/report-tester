@@ -15,6 +15,7 @@ export const apiUrls = {
     statistic: {
         metrics: '/api/statistic/metrics',
         slices: '/api/statistic/slices',
+        filter: '/api/statistic/filter',
     },
 
     filter: '/api/statistic/filter',

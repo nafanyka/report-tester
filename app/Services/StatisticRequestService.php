@@ -46,6 +46,7 @@ class StatisticRequestService
         try {
             $response = Http::withHeaders($this->generateHeaders())->get($url);
             $this->response['success'] = $response->getStatusCode() == 200;
+            $this->response['url'] = $url;
             $this->response['headers'] = $response->headers();
             $this->response['status'] = $response->getStatusCode();
             $this->response['body'] = $response->json();
@@ -68,6 +69,7 @@ class StatisticRequestService
         try {
             $response = Http::withHeaders($this->generateHeaders())->get($url);
             $this->response['success'] = $response->getStatusCode() == 200;
+            $this->response['url'] = $url;
             $this->response['headers'] = $response->headers();
             $this->response['status'] = $response->getStatusCode();
             $this->response['body'] = $response->json();
@@ -79,6 +81,47 @@ class StatisticRequestService
             return $this->response;
         } catch (\Exception $e) {
             $this->response['body'] = json_encode($e->getMessage());
+            return $this->response;
+        }
+    }
+
+    public function requestFilter()
+    {
+        $url = $this->env->domain . 'api/statistics/ssp2/dictionary/' . $this->request->slice;
+        $query = [
+            'report'    => join(',', $this->request->slices),
+            'limit'     => 25,
+            'page'      => 1,
+            'type'      => $this->request->report,
+        ];
+        foreach (($this->request->filters ?? []) as $filterKey => $filterValue) {
+            if (!empty($filterValue) && $filterKey != $this->request->slice) {
+                $query[$filterKey] = $filterValue;
+            }
+        }
+        if (!is_null($this->request->q)) {
+            $query['search'] = $this->request->q;
+        }
+        $url .= '?' . http_build_query($query);
+        //
+        try {
+            $response = Http::withHeaders($this->generateHeaders())->get($url);
+            $this->response['success'] = $response->getStatusCode() == 200;
+            $this->response['url'] = $url;
+            $this->response['headers'] = $response->headers();
+            $this->response['status'] = $response->getStatusCode();
+            $this->response['body'] = $response->json();
+            if (($this->response['body']['success'] ?? false) && !empty($this->response['body']['data'])) {
+//                dd($this->response);
+//                ReportConfigService::setReportConfig($this->request->report, ReportConfigType::SLICES->value, $this->request->instance ?? 'default', $this->response['body']['data']);
+            } else {
+//                dd($this->response);
+//                ReportConfigService::setReportConfig($this->request->report, ReportConfigType::SLICES->value, $this->request->instance ?? 'default', []);
+            }
+            return $this->response;
+        } catch (\Exception $e) {
+            $this->response['body'] = json_encode($e->getMessage());
+//            dd($this->response);
             return $this->response;
         }
     }

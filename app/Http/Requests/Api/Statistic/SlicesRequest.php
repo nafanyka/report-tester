@@ -28,7 +28,6 @@ class SlicesRequest extends FormRequest
         return [
             'authToken'         => ['required', 'string', ],
             'report'            => ['required', 'string', ],
-//            'selReportFormat'   => ['required', Rule::enum(ReportFormat::class)],
             'env'               => ['required', 'string', Rule::exists('environments', 'name')],
         ];
     }

@@ -1,10 +1,7 @@
 import axios from "axios";
 import apiUrls from "./apiUrls.js"
-export class Statistic {
-
-    constructor() {
-
-    }
+import Slices from "./slices/slices.js";
+export default class Statistic {
 
     getConfigFormsData() {
         return {
@@ -24,6 +21,15 @@ export class Statistic {
         return {...dataConfig};
     }
 
+    getFilterFormsData(slice, query) {
+        let dataConfig = this.getConfigFormsData();
+        dataConfig.slice = slice;
+        dataConfig.q = query;
+        dataConfig.slices = Slices.getSelectedSlices();
+        dataConfig.filters = Slices.getFilterValues();
+        return {...dataConfig};
+    }
+
     async getMetrics() {
         return axios.post(apiUrls.statistic.metrics, this.getMetricsFormsData());
     }
@@ -31,6 +37,8 @@ export class Statistic {
     async getSlices() {
         return axios.post(apiUrls.statistic.slices, this.getSlicesFormsData());
     }
-}
 
-export default Statistic;
+    async getFilterData(slice, query) {
+        return await axios.post(apiUrls.statistic.filter, this.getFilterFormsData(slice, query));
+    }
+}

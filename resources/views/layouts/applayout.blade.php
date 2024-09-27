@@ -7,7 +7,6 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="shortcut icon" href="/img/icons/clipboard_13340952.png" />
-{{--    <link rel="shortcut icon" href="/img/icons/icon-48x48.png" />--}}
 
     <title>@yield('title')</title>
 
