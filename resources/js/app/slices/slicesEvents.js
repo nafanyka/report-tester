@@ -30,11 +30,11 @@ export default {
             this.renderFilter(event.target.getAttribute('cb-slice'), event.target.checked);
             if (target.hasAttribute('cb-slice')) {
                 let checked = [...document.querySelectorAll('#slicesWrapper input:checked')].map(e => e.getAttribute('cb-slice'));
-                if (this.timeout) {
-                    clearTimeout(this.timeout);
+                if (window.slices.timeout) {
+                    clearTimeout(window.slices.timeout);
                 }
                 this.checked = checked;
-                this.timeout = setTimeout(() => {
+                window.slices.timeout = setTimeout(() => {
                     ReportConfig.set(document.getElementById('selReport').value, 'selected_slices', 'default', checked);
                 }, 1500);
             }

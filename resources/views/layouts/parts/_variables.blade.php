@@ -17,6 +17,9 @@
         @if(!empty($slices))
         window.slices.slices = {{\Illuminate\Support\Js::from($slices) }};
         @endif
+        @if(!empty($filterValues))
+        window.slices.filterValues = {{\Illuminate\Support\Js::from($filterValues) }};
+        @endif
         @if(!empty($selectedMetrics))
         window.metrics.checked = {{\Illuminate\Support\Js::from($selectedMetrics) }};
         @endif

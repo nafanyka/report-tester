@@ -1,5 +1,6 @@
 import moment from "moment";
 import TomSelect from "tom-select";
+import ReportConfig from "../reportconfig.js";
 
 export default {
     renderFilter(slice, enable = false) {
@@ -17,7 +18,6 @@ export default {
             div.append(lbl);
             //
             if (slice === 'date') {
-                div.innerHTML = div.innerHTML + '<input type="hidden" value="" data-filter="date_from" id="filter_date_from"><input type="hidden" value="" data-filter="date_to" id="filter_date_to">';
                 div.innerHTML = div.innerHTML + '<input type="text" class="flatpickr flatpickr-input input-control-sm" id="sliceFilter_'+slice+'">';
                 wrapper.appendChild(div);
 
@@ -26,19 +26,26 @@ export default {
                     ariaDateFormat: "Y-m-d",
                     dateFormat: "Y-m-d",
                     defaultDate: [
-                        moment().format('YYYY-MM-DD'),
-                        moment().format('YYYY-MM-DD'),
+                        window.slices.filterValues.date_from ?? moment().format('YYYY-MM-DD'),
+                        window.slices.filterValues.date_to ?? moment().format('YYYY-MM-DD'),
                     ],
                     onChange: function (dates) {
                         if (dates.length === 2) {
-                            document.getElementById('filter_date_from').value = moment(dates[0]).format('YYYY-MM-DD')
-                            document.getElementById('filter_date_to').value = moment(dates[1]).format('YYYY-MM-DD');
+                            window.slices.filterValues.date_from = moment(dates[0]).format('YYYY-MM-DD');
+                            window.slices.filterValues.date_to = moment(dates[1]).format('YYYY-MM-DD');
+                            if (window.slices.timeout) {
+                                clearTimeout(window.slices.timeout);
+                            }
+                            window.slices.timeout = setTimeout(() => {
+                                ReportConfig.set(document.getElementById('selReport').value, 'filter_values', 'default', window.slices.filterValues);
+                            }, 1500);
                         }
                     },
-                    onReady: function (dates) {
-                        document.getElementById('filter_date_from').value = moment(dates[0]).format('YYYY-MM-DD')
-                        document.getElementById('filter_date_to').value = moment(dates[1]).format('YYYY-MM-DD');
-                    },
+                    // onReady: function (dates) {
+                    //     console.log(dates);
+                        // document.getElementById('filter_date_from').value = moment(dates[0]).format('YYYY-MM-DD')
+                        // document.getElementById('filter_date_to').value = moment(dates[1]).format('YYYY-MM-DD');
+                    // },
                 });
             } else {
                 let inp = '<div class="input-group input-group-sm">'
@@ -55,14 +62,35 @@ export default {
                     searchField: ['name', 'id'],
                     preload: 'focus',
                     plugins: ['input_autogrow', 'remove_button'],
-                    onChange: function(option) {
-                        //TODO save filter values
+                    onInitialize: async function () {
+                        let currentValue = window.slices.filterValues[slice];
+                        if (currentValue) {
+                            Object.getOwnPropertyNames(currentValue).forEach((id) => {
+                                this.addOption({id: id, name: currentValue[id],});
+                                this.addItem(id);
+                            });
+                        }
+                    },
+                    onChange: function() {
+                        if (this.getValue().split(',')) {
+                            let currentIds = this.getValue().split(',');
+                            let currentValues = {};
+                            currentIds.forEach(id => {if (this.options[id]) {currentValues[id] = this.options[id].name}});
+                            window.slices.filterValues[slice] = currentValues;
+                        } else {
+                            delete(window.slices.filterValues[slice]);
+                        }
+                        if (window.slices.timeout) {
+                            clearTimeout(window.slices.timeout);
+                        }
+                        window.slices.timeout = setTimeout(() => {
+                            ReportConfig.set(document.getElementById('selReport').value, 'filter_values', 'default', window.slices.filterValues);
+                        }, 1500);
                     },
                     onBlur: function() {
                         this.clearOptions();
-                        this.load();
                     },
-                    load: function (query, callback) {
+                    load: async function (query, callback) {
                         window.statistic.getFilterData(slice, query).
                         then(response => {
                             window.slices.filterResponses[slice] = response.data.data;

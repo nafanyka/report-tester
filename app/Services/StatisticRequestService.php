@@ -11,7 +11,7 @@ class StatisticRequestService
 {
     protected $env;
 
-    protected $response = [
+    protected array $response = [
         'success' => false,
         'status' => 0,
         'headers' => [],
@@ -96,7 +96,11 @@ class StatisticRequestService
         ];
         foreach (($this->request->filters ?? []) as $filterKey => $filterValue) {
             if (!empty($filterValue) && $filterKey != $this->request->slice) {
-                $query[$filterKey] = $filterValue;
+                if (is_array($filterValue)) {
+                    $query[$filterKey] = array_keys($filterValue);
+                } else {
+                    $query[$filterKey] = $filterValue;
+                }
             }
         }
         if (!is_null($this->request->q)) {

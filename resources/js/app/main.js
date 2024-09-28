@@ -55,10 +55,10 @@ document.addEventListener('DOMContentLoaded', function(){
             Promise.all([
                 ReportConfig.get(option, 'metrics', 'default', {})
                     .then(result => {window.metrics.metrics = result})
-                    .catch(window.metrics.metrics = {}),
+                    .catch(() => {window.metrics.metrics = {};}),
                 ReportConfig.get(option, 'selected_metrics', 'default', [])
                     .then(result => {window.metrics.checked = result})
-                    .catch(window.metrics.checked = [])
+                    .catch(() => {window.metrics.checked = []})
             ]).then(() => {
                 metrics.clearMetrics();
                 metrics.renderMetrics();
@@ -66,10 +66,13 @@ document.addEventListener('DOMContentLoaded', function(){
             Promise.all([
                 ReportConfig.get(option, 'slices', 'default', [])
                     .then(result => {window.slices.slices = result})
-                    .catch(window.slices.slices = []),
+                    .catch(() => {window.slices.slices = [];}),
                 ReportConfig.get(option, 'selected_slices', 'default', [])
                     .then(result => {window.slices.checked = result})
-                    .catch(window.slices.checked = [])
+                    .catch(() => {window.slices.checked = [];}),
+                ReportConfig.get(option, 'filter_values', 'default', {})
+                    .then(result => {window.slices.filterValues = result})
+                    .catch(() => {window.slices.filterValues = [];})
             ]).then(() => {
                 slices.clearSlices();
                 slices.renderSlices();

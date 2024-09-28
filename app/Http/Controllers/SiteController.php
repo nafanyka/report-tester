@@ -24,7 +24,9 @@ class SiteController extends Controller
         //
         $selectedMetrics = ReportConfigService::getReportConfig($currentReport, ReportConfigType::SELECTED_METRICS->value,'default');
         $selectedSlices = ReportConfigService::getReportConfig($currentReport, ReportConfigType::SELECTED_SLICES->value,'default');
+        //
+        $filterValues = ReportConfigService::getReportConfig($currentReport, ReportConfigType::FILTER_VALUES->value,'default');
 
-        return view('index', compact('currentEnv', 'authToken', 'currentReportFormat', 'currentReport', 'reports', 'envs', 'metrics', 'slices', 'selectedMetrics', 'selectedSlices'));
+        return view('index', compact('currentEnv', 'authToken', 'currentReportFormat', 'currentReport', 'reports', 'envs', 'metrics', 'slices', 'selectedMetrics', 'selectedSlices', 'filterValues'));
     }
 }

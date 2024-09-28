@@ -29,11 +29,11 @@ export default {
             let target = event.target;
             if (target.hasAttribute('cb-metric')) {
                 let checked = [...document.querySelectorAll('#metricsWrapper input:checked')].map(e => e.getAttribute('cb-metric'));
-                if (this.timeout) {
-                    clearTimeout(this.timeout);
+                if (window.metrics.timeout) {
+                    clearTimeout(window.metrics.timeout);
                 }
                 this.checked = checked;
-                this.timeout = setTimeout(() => {
+                window.metrics.timeout = setTimeout(() => {
                     ReportConfig.set(document.getElementById('selReport').value, 'selected_metrics', 'default', checked);
                 }, 1500);
             }

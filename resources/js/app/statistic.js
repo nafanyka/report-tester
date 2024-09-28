@@ -26,7 +26,7 @@ export default class Statistic {
         dataConfig.slice = slice;
         dataConfig.q = query;
         dataConfig.slices = Slices.getSelectedSlices();
-        dataConfig.filters = Slices.getFilterValues();
+        dataConfig.filters = window.slices.filterValues;
         return {...dataConfig};
     }
 

@@ -9,6 +9,7 @@ export default class Slices {
     checked = null;
     timeout = null;
     filterResponses = {};
+    filterValues = {};
 
     constructor() {}
 
@@ -62,19 +63,6 @@ export default class Slices {
          return [...document.querySelectorAll('#slicesWrapper input[cb-slice]:checked')].map((e) => e.value);
     }
 
-    static getFilterValues() {
-        let checked = [...document.querySelectorAll('#slicesWrapper input[cb-slice]:checked')].map((e) => e.value);
-        const result = {};
-        checked.forEach((e) => {
-            if (e === 'date') {
-                result.date_from = document.getElementById('filter_date_from').value;
-                result.date_to = document.getElementById('filter_date_to').value;
-            } else {
-                result[e] = document.getElementById('sliceFilter_' + e).value;
-            }
-        });
-        return result;
-    }
 }
 
 Slices.prototype.events = slicesEvents.events;
