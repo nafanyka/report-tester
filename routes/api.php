@@ -20,6 +20,7 @@ Route::prefix('/statistic')->group(function () {
     Route::post('/metrics', [\App\Http\Controllers\Api\StatisticController::class, 'metrics']);
     Route::post('/slices', [\App\Http\Controllers\Api\StatisticController::class, 'slices']);
     Route::post('/filter', [\App\Http\Controllers\Api\StatisticController::class, 'filter']);
+    Route::post('/report', [\App\Http\Controllers\Api\StatisticController::class, 'report']);
 });
 
 Route::prefix('/report-config')->group(function () {

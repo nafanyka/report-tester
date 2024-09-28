@@ -2,25 +2,27 @@ export const apiUrls = {
     env: '/api/env/',
 
     currentstate: {
-        get: '/api/currentstate',
+        get:    '/api/currentstate',
         getAll: '/api/currentstate/getAll',
-        set: '/api/currentstate/store',
+        set:    '/api/currentstate/store',
     },
 
     reports: {
-        add: '/api/reports/add',
+        add:    '/api/reports/add',
         search: '/api/reports',
     },
 
     statistic: {
-        metrics: '/api/statistic/metrics',
-        slices: '/api/statistic/slices',
-        filter: '/api/statistic/filter',
+        metrics:    '/api/statistic/metrics',
+        slices:     '/api/statistic/slices',
+        filter:     '/api/statistic/filter',
+        report:     '/api/statistic/report',
     },
 
     filter: '/api/statistic/filter',
 
     reportConfig: '/api/report-config',
+
 }
 
 export default apiUrls;

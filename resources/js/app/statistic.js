@@ -30,6 +30,26 @@ export default class Statistic {
         return {...dataConfig};
     }
 
+    getCheckedMetricsFormsData() {
+        return {metrics: [...document.querySelectorAll('#metricsWrapper input:checked')].map(e => e.getAttribute('cb-metric')) };
+    }
+
+    getCheckedSlicesFormsData() {
+        return {slices: [...document.querySelectorAll('#slicesWrapper input:checked')].map(e => e.getAttribute('cb-slice')) };
+    }
+
+    getFiltersFormsData() {
+        return {filters: window.slices.filterValues};
+    }
+
+    getReportFormData() {
+        let dataConfig = this.getConfigFormsData();
+        let dataMetrics = this.getCheckedMetricsFormsData();
+        let dataSlices = this.getCheckedSlicesFormsData();
+        let dataFilters = this.getFiltersFormsData();
+        return {...dataConfig, ...dataMetrics, ...dataSlices, ...dataFilters};
+    }
+
     async getMetrics() {
         return axios.post(apiUrls.statistic.metrics, this.getMetricsFormsData());
     }
@@ -40,5 +60,9 @@ export default class Statistic {
 
     async getFilterData(slice, query) {
         return await axios.post(apiUrls.statistic.filter, this.getFilterFormsData(slice, query));
+    }
+
+    async getReport() {
+        return await axios.post(apiUrls.statistic.report, this.getReportFormData());
     }
 }

@@ -29,7 +29,7 @@ export default class Slices {
                 errors = [...errors, ...allErrors[key]];
             }
             if (errors.length > 0) {
-                toastr.error("Slices request error", errors.join('<br>'));
+                toastr.error(errors.join('<br>'), "Slices request error");
                 this.slices = {};
                 slicesViewBtn.classList.remove('btn-secondary');
                 slicesViewBtn.classList.remove('btn-success');

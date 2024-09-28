@@ -26,7 +26,7 @@ export default class Metrics {
                 errors = [...errors, ...allErrors[key]];
             }
             if (errors.length > 0) {
-                toastr.error("Metric request error", errors.join('<br>'));
+                toastr.error(errors.join('<br>'), "Metric request error");
                 this.metrics = {};
                 metricsViewBtn.classList.remove('btn-secondary');
                 metricsViewBtn.classList.remove('btn-success');
