@@ -93,9 +93,10 @@ export default {
                     load: async function (query, callback) {
                         window.statistic.getFilterData(slice, query).
                         then(response => {
-                            window.slices.filterResponses[slice] = response.data.data;
-                            const json = response.data.data;
+                            let logId = window.requestLogHistory.add('Filter "'+slice+'"', response.data.data);
                             let respViewBtn = document.getElementById('sliceFilterViewResp_'+slice);
+                            respViewBtn.setAttribute('data-history-log-id', logId);
+                            const json = response.data.data;
                             if (json.body.success) {
                                 respViewBtn.classList.add('btn-secondary');
                                 respViewBtn.classList.add('btn-success');
@@ -114,8 +115,8 @@ export default {
                             respViewBtn.classList.remove('btn-secondary');
                             respViewBtn.classList.remove('btn-success');
                             respViewBtn.classList.add('btn-danger');
+                            respViewBtn.removeAttribute('data-history-log-id');
                             callback();
-                            window.slices.filterResponses[slice] = null;
                         });
                     },
                 });

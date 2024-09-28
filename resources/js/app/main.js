@@ -7,11 +7,13 @@ import Metrics from "./metrics/metrics.js";
 import Slices from "./slices/slices.js";
 import Statistic from "./statistic.js";
 import ReportConfig from "./reportconfig.js";
+import RequestLogHistory from "./requestLogHistory.js"
 
 window.environment = new Environment();
 window.statistic = new Statistic();
 window.metrics = new Metrics();
 window.slices = new Slices();
+window.requestLogHistory = new RequestLogHistory();
 
 document.addEventListener('DOMContentLoaded', function(){
     window.environment.init();

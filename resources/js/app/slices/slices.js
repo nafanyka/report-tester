@@ -5,10 +5,8 @@ import slicesEvents from "./slicesEvents.js";
 
 export default class Slices {
     slices = null;
-    sliceResponse = null;
     checked = null;
     timeout = null;
-    filterResponses = {};
     filterValues = {};
 
     constructor() {}
@@ -33,16 +31,17 @@ export default class Slices {
             if (errors.length > 0) {
                 toastr.error("Slices request error", errors.join('<br>'));
                 this.slices = {};
-                this.sliceResponse = {};
                 slicesViewBtn.classList.remove('btn-secondary');
                 slicesViewBtn.classList.remove('btn-success');
                 slicesViewBtn.classList.add('btn-danger');
+                slicesViewBtn.removeAttribute('data-history-log-id');
                 this.clearSlices();
             }
         });
         if (slicesResponse !== undefined) {
             this.slices = {};
-            this.sliceResponse = slicesResponse.data.data;
+            let logId = window.requestLogHistory.add('Slices', slicesResponse.data.data);
+            slicesViewBtn.setAttribute('data-history-log-id', logId);
             if ((slicesResponse.data.success ?? false) && (slicesResponse.data.data.success ?? false)) {
                 slicesViewBtn.classList.remove('btn-secondary');
                 slicesViewBtn.classList.remove('btn-danger');

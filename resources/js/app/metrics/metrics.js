@@ -6,7 +6,6 @@ export default class Metrics {
     timeout = null;
 
     metrics = null;
-    metricResponse = null;
     checked = null;
 
     constructor() {}
@@ -32,12 +31,14 @@ export default class Metrics {
                 metricsViewBtn.classList.remove('btn-secondary');
                 metricsViewBtn.classList.remove('btn-success');
                 metricsViewBtn.classList.add('btn-danger');
+                metricsViewBtn.removeAttribute('data-history-log-id');
                 this.clearMetrics();
             }
         });
         if (metricsResponse !== undefined) {
             this.metrics = {};
-            this.metricResponse = metricsResponse.data.data;
+            let logId = window.requestLogHistory.add('Metrics', metricsResponse.data.data);
+            metricsViewBtn.setAttribute('data-history-log-id', logId);
             if ((metricsResponse.data.success ?? false) && (metricsResponse.data.data.success ?? false)) {
                 metricsViewBtn.classList.remove('btn-secondary');
                 metricsViewBtn.classList.remove('btn-danger');
@@ -49,6 +50,7 @@ export default class Metrics {
                 metricsViewBtn.classList.remove('btn-secondary');
                 metricsViewBtn.classList.remove('btn-success');
                 metricsViewBtn.classList.add('btn-danger');
+                metricsViewBtn.removeAttribute('data-history-log-id');
                 this.clearMetrics();
             }
         }
