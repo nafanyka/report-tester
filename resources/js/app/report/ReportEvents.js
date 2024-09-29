@@ -4,6 +4,7 @@ export default {
             this.runReport();
         });
 
+
         document.getElementById('btnViewRunReport').addEventListener('click', (e) => {
             const button = e.target.closest('button#btnViewRunReport');
             if (button) {

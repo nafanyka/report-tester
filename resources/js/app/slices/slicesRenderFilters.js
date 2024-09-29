@@ -63,9 +63,17 @@ export default {
                     preload: 'focus',
                     plugins: ['input_autogrow', 'remove_button'],
                     onInitialize: async function () {
-                        let currentValue = window.slices.filterValues[slice];
+                        let currentValue = {...window.slices.filterValues[slice]};
+                        let props = Object.getOwnPropertyNames(currentValue);
+                        if (props.length === 1 && props[0] === 'length' && currentValue.length == 0) {
+                            console.warn('RECOVERY FILTER - '+slice+' - only length property');
+                            console.log(currentValue);
+                            currentValue = {};
+                            delete window.slices.filterValues[slice];
+                        }
                         if (currentValue) {
-                            Object.getOwnPropertyNames(currentValue).forEach((id) => {
+                            props = Object.getOwnPropertyNames(currentValue);
+                            props.forEach((id) => {
                                 this.addOption({id: id, name: currentValue[id],});
                                 this.addItem(id);
                             });
@@ -89,6 +97,7 @@ export default {
                     },
                     onBlur: function() {
                         this.clearOptions();
+                        this.load();
                     },
                     load: async function (query, callback) {
                         window.statistic.getFilterData(slice, query).
