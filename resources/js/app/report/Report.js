@@ -1,13 +1,23 @@
 import ReportEvents from "./ReportEvents.js";
 import ReportRender from "./ReportRender.js";
 import toastr from "toastr";
+//
+import {TabulatorFull as Tabulator} from 'tabulator-tables';
 
 export default class Report {
 
     reportData = {};
+    gridTable;
 
     init() {
         this.events();
+        this.gridTable = new Tabulator("#reportGridTable", {
+            columns: [],
+            data: [],
+            layout: "fitDataFill",
+            placeholder:"No Data Available",
+            dataLoader: true,
+        });
     }
 
     async runReport() {
@@ -28,6 +38,7 @@ export default class Report {
                 this.clearTable();
             }
         });
+        window.Report.gridTable.dataLoader.clearAlert();
         if (reportResponse !== undefined) {
             this.reportData = {};
             let logId = window.requestLogHistory.add('Report', reportResponse.data.data);
@@ -36,7 +47,7 @@ export default class Report {
                 viewBtn.classList.remove('btn-secondary');
                 viewBtn.classList.remove('btn-danger');
                 viewBtn.classList.add('btn-success');
-                this.reportData = reportResponse.data.data.body.data;
+                this.reportData = reportResponse.data.data.body;
                 this.clearTable();
                 this.renderTable();
             } else {

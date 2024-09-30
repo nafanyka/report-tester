@@ -127,18 +127,18 @@ class StatisticRequestService
     public function requestReport()
     {
         //TODO FORMAT
-        //TODO PAGE
-        //TODO PERPAGE
-        //TODO SORT
         $url = $this->env->domain . 'api/statistics/ssp2';
         $query = [
             'fields'      => implode(',', array_merge($this->request->slices, $this->request->metrics)),
             'report'    => join(',', $this->request->slices),
-            'limit'     => 25,
-            'page'      => 1,
+            'limit'     => $this->request->perpage,
+            'page'      => $this->request->page,
             'type'      => $this->request->report,
             'only_commercial_client' => 0, //TODO REMOVE
         ];
+        if ($this->request->sort && $this->request->sort !== 'default') {
+            $query['sort'] = ($this->request->sortDir === 'desc' ? '-' : '') . $this->request->sort;
+        }
         foreach (($this->request->filters ?? []) as $filterKey => $filterValue) {
             if (!empty($filterValue)) {
                 $query[$filterKey] = (is_array($filterValue) ? implode(',', array_keys($filterValue)) : $filterValue);

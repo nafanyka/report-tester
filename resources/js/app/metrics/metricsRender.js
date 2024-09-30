@@ -1,3 +1,5 @@
+import TableHelper from "../helpers/tableHelper.js";
+
 export default {
     clearMetrics() {
         let wrapper = document.getElementById('metricsWrapper');
@@ -42,6 +44,7 @@ export default {
                 if (this.checked.includes(metric)) {
                     cb.setAttribute('checked', 'checked');
                 }
+                TableHelper.renderSort();
                 div.append(cb);
                 let lbl = document.createElement('label');
                 lbl.classList.add('form-check-label');

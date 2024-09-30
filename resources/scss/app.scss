@@ -41,5 +41,9 @@
 @import "tom-select/src/scss/tom-select.bootstrap5";
 @import "toastr";
 
-@import "app/main";
+//
+@import "tabulator-tables/src/scss/tabulator.scss";
+@import "tabulator-tables/src/scss/themes/bootstrap/tabulator_bootstrap5.scss";
+@import "tabulator-tables/src/scss/themes/bootstrap/functions5.scss";
 
+@import "app/main";

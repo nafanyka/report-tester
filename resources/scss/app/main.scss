@@ -22,3 +22,25 @@
     padding-top: 5px !important;
     padding-bottom: 5px !important;
 }
+
+
+
+.tabulator-table .tabulator-row {
+    min-height: 31px !important;
+}
+.tabulator-table .tabulator-row  .tabulator-cell {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+.tabulator-table .tabulator-cell {
+    font-family: monospace !important;
+}
+.tabulator .tabulator-alert .tabulator-alert-msg {
+    border: 1px solid #fff !important;
+    background: #333 !important;
+    color: #fff !important;
+}
+
+.tabulator .tabulator-placeholder-contents {
+    font-size: 14px !important;
+}

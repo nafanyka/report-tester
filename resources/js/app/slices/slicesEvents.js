@@ -1,6 +1,5 @@
-import jsonPretty from "../helpers/jsonpretty.js";
 import ReportConfig from "../reportconfig.js";
-import * as bootstrap from 'bootstrap';
+import TableHelper from "..//helpers/tableHelper.js";
 
 export default {
     events() {
@@ -29,6 +28,7 @@ export default {
                     clearTimeout(window.slices.timeout);
                 }
                 this.checked = checked;
+                TableHelper.renderSort();
                 window.slices.timeout = setTimeout(() => {
                     ReportConfig.set(document.getElementById('selReport').value, 'selected_slices', 'default', checked);
                 }, 1500);

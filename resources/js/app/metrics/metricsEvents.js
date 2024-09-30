@@ -1,6 +1,7 @@
 import jsonPretty from "../helpers/jsonpretty.js";
 import * as bootstrap from "bootstrap";
 import ReportConfig from "../reportconfig.js";
+import TableHelper from "@/app/helpers/tableHelper.js";
 
 export default {
     events() {
@@ -24,6 +25,7 @@ export default {
                 if (window.metrics.timeout) {
                     clearTimeout(window.metrics.timeout);
                 }
+                TableHelper.renderSort();
                 this.checked = checked;
                 window.metrics.timeout = setTimeout(() => {
                     ReportConfig.set(document.getElementById('selReport').value, 'selected_metrics', 'default', checked);

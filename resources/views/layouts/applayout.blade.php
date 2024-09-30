@@ -21,7 +21,7 @@
 
     <div class="main">
         @include('layouts.parts._topbar')
-        <main class="content pt-4 ps-4 pe-4">
+        <main class="content pt-2 ps-3 pe-4">
             @yield('content')
         </main>
         @include('layouts.parts._footer')

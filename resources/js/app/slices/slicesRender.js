@@ -1,3 +1,5 @@
+import TableHelper from "../helpers/tableHelper.js";
+
 export default {
     clearSlices() {
         let wrapper = document.getElementById('slicesWrapper');
@@ -34,6 +36,7 @@ export default {
             } else {
                 this.renderFilter(slice.id, false);
             }
+            TableHelper.renderSort();
             //
             if ((slice.is_visible ?? false)) {
                 lbl.classList.add('btn-outline-primary');

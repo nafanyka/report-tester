@@ -33,6 +33,10 @@ class ReportRequest extends FormRequest
             'metrics'           => ['required', 'array', 'min:1'],
             'slices'            => ['required', 'array', 'min:1'],
             'filters'           => ['sometimes', 'array', ],
+            'sort'              => ['required', 'string', ],
+            'sortDir'           => ['required', 'string', Rule::in(['asc', 'desc'])],
+            'perpage'           => ['required', 'integer', 'min:10', 'max:300'],
+            'page'              => ['required', 'integer', 'min:1'],
         ];
     }
 

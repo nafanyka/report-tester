@@ -41,13 +41,22 @@ export default class Statistic {
     getFiltersFormsData() {
         return {filters: window.slices.filterValues};
     }
+    getSortFormsData() {
+        return {sort: document.getElementById('selSortField').value, sortDir: document.getElementById('selSortDir').value};
+    }
+    getPageFormsData() {
+        return {perpage: document.getElementById('selPerpage').value, page: document.getElementById('inpPage').value};
+    }
 
     getReportFormData() {
-        let dataConfig = this.getConfigFormsData();
-        let dataMetrics = this.getCheckedMetricsFormsData();
-        let dataSlices = this.getCheckedSlicesFormsData();
-        let dataFilters = this.getFiltersFormsData();
-        return {...dataConfig, ...dataMetrics, ...dataSlices, ...dataFilters};
+        return {
+            ...this.getConfigFormsData(),
+            ...this.getCheckedMetricsFormsData(),
+            ...this.getCheckedSlicesFormsData(),
+            ...this.getFiltersFormsData(),
+            ...this.getSortFormsData(),
+            ...this.getPageFormsData(),
+        };
     }
 
     async getMetrics() {
@@ -63,6 +72,11 @@ export default class Statistic {
     }
 
     async getReport() {
+        try {
+            window.Report.gridTable.dataLoader.alertLoader();
+        } catch (e) {
+            console.error(e);
+        }
         return await axios.post(apiUrls.statistic.report, this.getReportFormData());
     }
 }
