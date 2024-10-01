@@ -10,6 +10,7 @@ import ReportConfig from "./reportconfig.js";
 import RequestLogHistory from "./requestLogHistory.js"
 import CollapseHelper from "./helpers/collapseHelper.js"
 import Report from "./report/Report.js";
+import CustomFilter from "./customFilter/CustomFilter.js";
 
 window.environment = new Environment();
 window.statistic = new Statistic();
@@ -17,12 +18,15 @@ window.metrics = new Metrics();
 window.slices = new Slices();
 window.requestLogHistory = new RequestLogHistory();
 window.Report = new Report();
+window.customFilter = new CustomFilter();
 
 document.addEventListener('DOMContentLoaded', function(){
     window.environment.init();
     window.metrics.init();
     window.slices.init();
     window.Report.init();
+    window.customFilter.init();
+    //
     EnvironmentDialogs.events();
     CollapseHelper();
     //

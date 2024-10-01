@@ -13,7 +13,7 @@ export const jsonPretty = {
     prettyPrint: function(obj) {
         // jsonPretty.clear(obj);
         //
-        let jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+        let jsonLine = /^( *)("\w+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
         return JSON.stringify(obj, null, 3)
             .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
             .replace(/</g, '&lt;').replace(/>/g, '&gt;')

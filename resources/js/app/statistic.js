@@ -41,6 +41,10 @@ export default class Statistic {
     getFiltersFormsData() {
         return {filters: window.slices.filterValues};
     }
+
+    getCustomFiltersFormsData() {
+        return {customFilters: window.customFilter.currentValues};
+    }
     getSortFormsData() {
         return {sort: document.getElementById('selSortField').value, sortDir: document.getElementById('selSortDir').value};
     }
@@ -56,6 +60,7 @@ export default class Statistic {
             ...this.getFiltersFormsData(),
             ...this.getSortFormsData(),
             ...this.getPageFormsData(),
+            ...this.getCustomFiltersFormsData(),
         };
     }
 

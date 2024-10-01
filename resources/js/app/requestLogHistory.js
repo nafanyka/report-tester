@@ -35,9 +35,11 @@ export default class RequestLogHistory {
             document.getElementById('dialogViewResponseTitle').innerHTML = 'View '+log.type+' Response ('+log.dt+')';
             let body = document.getElementById('dialogViewResponseBody');
             let code = document.getElementById('dialogViewResponseCode');
+            let url = document.getElementById('dialogViewResponseURL');
             let header = document.getElementById('dialogViewResponseHeader');
 
             code.innerHTML = jsonPretty.prettyPrint(log.value.status || 0);
+            url.innerHTML = (log.value.url || '').replaceAll('%2C', ',');
             body.innerHTML = jsonPretty.prettyPrint(log.value.body || {});
             header.innerHTML = jsonPretty.prettyPrint(log.value.headers || {});
 

@@ -1,7 +1,5 @@
-import jsonPretty from "../helpers/jsonpretty.js";
-import * as bootstrap from "bootstrap";
 import ReportConfig from "../reportconfig.js";
-import TableHelper from "@/app/helpers/tableHelper.js";
+import TableHelper from "../helpers/tableHelper.js";
 
 export default {
     events() {

@@ -134,13 +134,17 @@ class StatisticRequestService
             'limit'     => $this->request->perpage,
             'page'      => $this->request->page,
             'type'      => $this->request->report,
-            'only_commercial_client' => 0, //TODO REMOVE
         ];
         if ($this->request->sort && $this->request->sort !== 'default') {
             $query['sort'] = ($this->request->sortDir === 'desc' ? '-' : '') . $this->request->sort;
         }
+        foreach (($this->request->customFilters ?? []) as $filterKey => $filterValue) {
+            if (!($filterValue === null || $filterValue === '' || (is_array($filterValue) && count($filterValue) === 0))) {
+                $query[$filterKey] = (is_array($filterValue) ? implode(',', array_keys($filterValue)) : $filterValue);
+            }
+        }
         foreach (($this->request->filters ?? []) as $filterKey => $filterValue) {
-            if (!empty($filterValue)) {
+            if (!($filterValue === null || $filterValue === '' || (is_array($filterValue) && count($filterValue) === 0))) {
                 $query[$filterKey] = (is_array($filterValue) ? implode(',', array_keys($filterValue)) : $filterValue);
             }
         }

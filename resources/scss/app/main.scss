@@ -23,16 +23,28 @@
     padding-bottom: 5px !important;
 }
 
+#customFiltersWrapper .input-group-sm > .ts-wrapper > .ts-control {
+    padding-top: 2px !important;
+}
 
+#dialogViewResponseURL {
+    color: navy !important;
+}
+
+input.flatpickr-input {
+    border-color: rgb(208, 208, 208) !important;
+    border-style: solid !important;
+    border-width: 0.8px !important;
+}
 
 .tabulator-table .tabulator-row {
     min-height: 31px !important;
 }
-.tabulator-table .tabulator-row  .tabulator-cell {
+.tabulator-table .tabulator-row .tabulator-cell, .tabulator-calcs .tabulator-cell {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
 }
-.tabulator-table .tabulator-cell {
+.tabulator-table .tabulator-cell, .tabulator-calcs .tabulator-cell,  {
     font-family: monospace !important;
 }
 .tabulator .tabulator-alert .tabulator-alert-msg {

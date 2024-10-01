@@ -26,6 +26,12 @@
         @if(!empty($selectedSlices))
         window.slices.checked = {{\Illuminate\Support\Js::from($selectedSlices) }};
         @endif
+        @if(!empty($customFilters))
+        window.customFilter.configs = {{\Illuminate\Support\Js::from($customFilters) }};
+        @endif
+        @if(!empty($customFilterValues))
+        window.customFilter.currentValues = {{\Illuminate\Support\Js::from($customFilterValues) }};
+        @endif
     });
 
     @if(!empty($selectedSlices))

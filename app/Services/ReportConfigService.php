@@ -19,7 +19,9 @@ class ReportConfigService
             $config->type = $type;
             $config->instance_name = $instance;
         }
-        $config->value = array_filter($value, function ($item) {return !empty($item);});
+        $config->value = array_filter($value, function ($item) {
+            return !($item === null || $item === '' || (is_array($item) && count($item) === 0));
+        });
         $config->save();
     }
 }

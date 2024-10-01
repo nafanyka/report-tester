@@ -65,7 +65,7 @@ export default {
                     onInitialize: async function () {
                         let currentValue = {...window.slices.filterValues[slice]};
                         let props = Object.getOwnPropertyNames(currentValue);
-                        if (props.length === 1 && props[0] === 'length' && currentValue.length == 0) {
+                        if (props.length === 1 && props[0] === 'length' && currentValue.length === 0) {
                             console.warn('RECOVERY FILTER - '+slice+' - only length property');
                             console.log(currentValue);
                             currentValue = {};

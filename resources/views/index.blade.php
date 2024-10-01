@@ -8,7 +8,7 @@
 {{-- slices--}}
         <div class="row">
             <div class="col col-12 m-0 pe-0 mt-0">
-                <div class="card p-1 m-0">
+                <div class="card p-1 m-0 border-secondary border-1">
                     <div class="card-header p-2 h-4">
                         <a data-bs-toggle="collapse" href="#slicesWrapperBody" aria-expanded="true" aria-controls="slicesWrapperBody" id="slicesWrapperHeader">
                             <i data-feather="chevron-down" class="float-end fa"></i>
@@ -29,15 +29,18 @@
 {{-- filters--}}
         <div class="row">
             <div class="col col-12 m-0 pe-0 mt-2">
-                <div class="card p-1 m-0">
+                <div class="card p-1 m-0 border-secondary border-1">
                     <div class="card-header p-2 h-4">
                         <a data-bs-toggle="collapse" class="collapsed" href="#filtersWrapperBody" aria-expanded="true" aria-controls="filtersWrapperBody" id="filtersWrapperHeader">
                             <i data-feather="chevron-down" class="float-end fa"></i>
                             Filters
                         </a>
+                        <button class="btn btn-sm btn-primary ms-3" type="button" id="addCustomFilter" title="Add custom filter"><i data-feather="plus"></i></button>
                     </div>
                     <div id="filtersWrapperBody" class="collapse" aria-labelledby="filtersWrapperHeader">
                         <div class="card-body p-2 d-flex flex-wrap" id="filtersWrapper"></div>
+                        <hr class="mt-2 mb-2">
+                        <div class="card-body p-2 d-flex flex-wrap" id="customFiltersWrapper"></div>
                     </div>
                 </div>
             </div>
@@ -46,7 +49,7 @@
 {{-- metrics--}}
         <div class="row">
             <div class="col col-12 m-0 pe-0 mt-2">
-                <div class="card p-1 m-0">
+                <div class="card p-1 m-0 border-secondary border-1">
                     <div class="card-header p-2 h-4">
                         <a data-bs-toggle="collapse" href="#metricsWrapperBody" aria-expanded="true" aria-controls="metricsWrapperBody" id="metricsWrapperHeader">
                             <i data-feather="chevron-down" class="float-end fa"></i>
@@ -75,7 +78,7 @@
 {{-- report--}}
         <div class="row">
             <div class="col col-12 m-0 pe-0 mt-2">
-                <div class="card p-1 m-0">
+                <div class="card p-1 m-0 border-secondary border-1">
                     <div class="card-header p-2 h-4">
                         Results
                         <div class="btn-group input-group-sm ms-3" role="group">
