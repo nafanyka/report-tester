@@ -129,7 +129,7 @@ export default class TableHelper {
             let select = document.getElementById('selSortField');
             let selected = select.value;
             [...select.querySelectorAll('[data-dynamic-option]')].map((i) => {i.remove();});
-            window.slices.checked.forEach((sliceId) => {
+            (window.slices.checked ?? []).forEach((sliceId) => {
                 let slice = window.slices.slices.find((i) => i.id === sliceId);
                 if (slice) {
                     let option = document.createElement('option');
@@ -145,7 +145,7 @@ export default class TableHelper {
             option.setAttribute('data-dynamic-option', 'true');
             option.setAttribute('disabled', 'disabled');
             select.appendChild(option);
-            window.metrics.checked.forEach((metricId) => {
+            (window.metrics.checked ?? []).forEach((metricId) => {
                 let metric = window.metrics.metrics.metrics[metricId];
                 if (metric) {
                     let option = document.createElement('option');

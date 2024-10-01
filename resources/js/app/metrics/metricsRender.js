@@ -41,7 +41,7 @@ export default {
                 cb.setAttribute('id', 'cbMetrics_'+metric);
                 cb.setAttribute('value', metric);
                 cb.setAttribute('cb-metric', metric);
-                if (this.checked.includes(metric)) {
+                if ((this.checked ?? []).includes(metric)) {
                     cb.setAttribute('checked', 'checked');
                 }
                 TableHelper.renderSort();

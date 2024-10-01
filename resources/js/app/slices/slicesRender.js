@@ -30,7 +30,7 @@ export default {
             let lbl = document.createElement('label');
             lbl.classList.add('btn');
             //
-            if (this.checked.includes(slice.id)) {
+            if ((this.checked ?? []).includes(slice.id)) {
                 cb.setAttribute('checked', 'checked');
                 this.renderFilter(slice.id, true);
             } else {
